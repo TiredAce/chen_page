@@ -170,14 +170,15 @@
               <span class="list-number green">2</span>
               <span>{{ t('about.doing2') }}</span>
             </li>
-            <!-- <li>
-              <span class="list-number green">3</span>
-              <span>研究AI，研究产品，研究创业</span>
-            </li> -->
+
             <li>
-              <span class="list-number green">4</span>
+              <span class="list-number green">3</span>
               <span>{{ t('about.doing4') }}</span>
             </li>
+            <!-- <li>
+              <span class="list-number green">4</span>
+              <span>研究AI，研究产品，研究创业</span>
+            </li> -->
             <!-- <li>
               <span class="list-number green">5</span>
               <span>学习如何成为一个靠谱的IP</span>
