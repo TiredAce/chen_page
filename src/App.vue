@@ -2163,11 +2163,13 @@ onUnmounted(() => {
 /* 首页 - 流动的渐变波浪 */
 .section-bg-home {
   background: 
-    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(102, 126, 234, 0.35) 0%, transparent 60%),
-    radial-gradient(ellipse 500px 350px at 80% 70%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
-    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(118, 75, 162, 0.25) 0%, transparent 70%);
-  background-size: 200% 200%;
-  animation: waveFlow 18s ease-in-out infinite;
+    radial-gradient(circle 350px at 25% 35%, rgba(118, 75, 162, 0.35) 0%, transparent 55%),
+    radial-gradient(circle 320px at 75% 65%, rgba(102, 126, 234, 0.35) 0%, transparent 55%),
+    radial-gradient(circle 280px at 50% 15%, rgba(139, 92, 246, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 240px at 15% 85%, rgba(118, 75, 162, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 200px at 85% 25%, rgba(102, 126, 234, 0.25) 0%, transparent 55%);
+  background-size: 120% 120%;
+  animation: rotateParticles 30s linear infinite;
 }
 
 @keyframes waveFlow {
@@ -2180,16 +2182,15 @@ onUnmounted(() => {
 }
 
 /* 关于我 - 旋转的圆形粒子 */
-.section-bg-about {
+.section-bg-about{
   background: 
-    radial-gradient(circle 350px at 25% 35%, rgba(118, 75, 162, 0.35) 0%, transparent 55%),
-    radial-gradient(circle 320px at 75% 65%, rgba(102, 126, 234, 0.35) 0%, transparent 55%),
-    radial-gradient(circle 280px at 50% 15%, rgba(139, 92, 246, 0.3) 0%, transparent 55%),
-    radial-gradient(circle 240px at 15% 85%, rgba(118, 75, 162, 0.3) 0%, transparent 55%),
-    radial-gradient(circle 200px at 85% 25%, rgba(102, 126, 234, 0.25) 0%, transparent 55%);
-  background-size: 120% 120%;
-  animation: rotateParticles 25s linear infinite;
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(102, 126, 234, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 500px 350px at 80% 70%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(118, 75, 162, 0.25) 0%, transparent 70%);
+  background-size: 200% 200%;
+  animation: waveFlow 18s ease-in-out infinite;
 }
+
 
 @keyframes rotateParticles {
   0% {
@@ -2236,11 +2237,11 @@ onUnmounted(() => {
 /* 技能与生活 - 流动的线条 */
 .section-bg-skills {
   background: 
-    linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.15) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.15) 50%, transparent 70%),
-    linear-gradient(135deg, transparent 40%, rgba(118, 75, 162, 0.12) 50%, transparent 60%),
-    linear-gradient(90deg, transparent 20%, rgba(102, 126, 234, 0.1) 50%, transparent 80%),
-    linear-gradient(0deg, transparent 25%, rgba(139, 92, 246, 0.12) 50%, transparent 75%);
+    linear-gradient(45deg, transparent 70%, rgba(102, 126, 234, 0.15) 50%, transparent 90%),
+    linear-gradient(-45deg, transparent 70%, rgba(139, 92, 246, 0.15) 50%, transparent 90%),
+    linear-gradient(135deg, transparent 70%, rgba(118, 75, 162, 0.12) 50%, transparent 80%),
+    linear-gradient(90deg, transparent 70%, rgba(102, 126, 234, 0.1) 50%, transparent 99%),
+    linear-gradient(0deg, transparent 75%, rgba(139, 92, 246, 0.12) 50%, transparent 95%);
   background-size: 300% 300%, 250% 250%, 200% 200%, 350% 350%, 280% 280%;
   animation: lineFlow 20s ease-in-out infinite;
 }
