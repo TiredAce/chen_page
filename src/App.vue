@@ -708,7 +708,7 @@ const contactItemsBase = [
     key: 'website',
     detail: 'chen.blog',
     colorClass: 'orange',
-    link: 'https://tired-ace-github-1o4vy2it7-chens-projects-33c6e8ff.vercel.app/'
+    link: 'https://tired-ace-github-io.vercel.app/'
   }
 ]
 
