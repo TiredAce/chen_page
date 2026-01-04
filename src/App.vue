@@ -4,7 +4,9 @@
     <nav class="navbar" :class="{ scrolled: isScrolled }">
       <div class="nav-container">
         <div class="nav-logo">
-          <div class="logo-icon">🧠</div>
+          <a @click="scrollTo('home')">
+            <div class="logo-icon">🧠</div>
+          </a>
         </div>
         <div class="nav-links">
           <a href="#home" @click="scrollTo('home')" :class="{ active: activeSection === 'home' }">{{ t('nav.home') }}</a>
@@ -20,16 +22,18 @@
           <button class="icon-btn theme-toggle" @click="toggleTheme" :title="isDarkTheme ? t('theme.switchToLight') : t('theme.switchToDark')">
             {{ isDarkTheme ? '🌙' : '☀' }}
           </button>
-          <button class="icon-btn mobile-menu-btn" @click="toggleMobileMenu" title="菜单">
-            <span class="hamburger" :class="{ active: isMobileMenuOpen }">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-          </button>
         </div>
       </div>
     </nav>
+
+    <!-- 移动端右下角浮动菜单按钮 -->
+    <button class="floating-menu-btn" @click="toggleMobileMenu" :class="{ active: isMobileMenuOpen }" title="菜单">
+      <span class="hamburger" :class="{ active: isMobileMenuOpen }">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
 
     <!-- 移动端遮罩层 -->
     <div 
@@ -944,8 +948,38 @@ onUnmounted(() => {
   gap: 1rem;
 }
 
-.mobile-menu-btn {
-  display: none;
+/* 右下角浮动菜单按钮 */
+.floating-menu-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: none;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4), 0 8px 32px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  z-index: 1997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.floating-menu-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.5), 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.floating-menu-btn:active {
+  transform: scale(0.95);
+}
+
+.floating-menu-btn.active {
+  background: rgba(236, 72, 153, 0.9);
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.4), 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .hamburger {
@@ -2274,13 +2308,7 @@ onUnmounted(() => {
     gap: 0.5rem;
   }
 
-  .mobile-menu-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .icon-btn:not(.mobile-menu-btn) {
+  .icon-btn {
     display: none;
   }
 
