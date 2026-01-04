@@ -5,18 +5,21 @@
       <div class="nav-container">
         <div class="nav-logo">
           <div class="logo-icon">🧠</div>
-          <span>                 </span>
         </div>
         <div class="nav-links">
-          <a href="#home" @click="scrollTo('home')" :class="{ active: activeSection === 'home' }">首页</a>
-          <a href="#about" @click="scrollTo('about')" :class="{ active: activeSection === 'about' }">关于我</a>
-          <a href="#knowledge" @click="scrollTo('knowledge')" :class="{ active: activeSection === 'knowledge' }">知识空间</a>
-          <a href="#skills" @click="scrollTo('skills')" :class="{ active: activeSection === 'skills' }">技能&生活</a>
-          <a href="#contact" @click="scrollTo('contact')" :class="{ active: activeSection === 'contact' }">联系方式</a>
+          <a href="#home" @click="scrollTo('home')" :class="{ active: activeSection === 'home' }">{{ t('nav.home') }}</a>
+          <a href="#about" @click="scrollTo('about')" :class="{ active: activeSection === 'about' }">{{ t('nav.about') }}</a>
+          <a href="#knowledge" @click="scrollTo('knowledge')" :class="{ active: activeSection === 'knowledge' }">{{ t('nav.knowledge') }}</a>
+          <a href="#skills" @click="scrollTo('skills')" :class="{ active: activeSection === 'skills' }">{{ t('nav.skills') }}</a>
+          <a href="#contact" @click="scrollTo('contact')" :class="{ active: activeSection === 'contact' }">{{ t('nav.contact') }}</a>
         </div>
         <div class="nav-actions">
-          <button class="icon-btn" title="字体大小">A</button>
-          <button class="icon-btn" title="主题切换">☀</button>
+          <button class="icon-btn language-toggle" @click="toggleLanguage" :title="isEnglish ? 'Switch to Chinese' : 'Switch to English'">
+            {{ isEnglish ? 'En' :'中' }}
+          </button>
+          <button class="icon-btn theme-toggle" @click="toggleTheme" :title="isDarkTheme ? t('theme.switchToLight') : t('theme.switchToDark')">
+            {{ isDarkTheme ? '🌙' : '☀' }}
+          </button>
         </div>
       </div>
     </nav>
@@ -27,25 +30,23 @@
       <div class="hero-content">
         <div class="hero-left">
           <div class="profile-image">
-            <div class="image-placeholder">
-              <div class="placeholder-icon">👤</div>
-            </div>
+            <img src="/main_photo.png" alt="个人照片" class="profile-photo" />
           </div>
         </div>
         <div class="hero-right">
           <h1 class="hero-title">
-            <span class="gradient-text-green">Hi!</span>
-            <span class="gradient-text-blue"> 我是陈碧辉</span>
+            <span class="gradient-text-green">Hi! </span>
+            <span class="gradient-text-blue"> {{ t('hero.name') }}</span>
           </h1>
           <p class="hero-description">
-            一名战略驱动、系统化思考、高度务实的机会主义者。
+            {{ t('hero.desc1') }}
           </p>
           <p class="hero-description">
-            一名 AI 原生的年轻人，热爱探索未知领域、收集整理有用的知识并分享。持续发现并实现可以由 AI 加速的问题，希望成为一名优秀的智能体工程师。
+            {{ t('hero.desc2') }}
           </p>
           <div class="hero-affiliation">
             <span class="affiliation-icon">◎</span>
-            <span>南开大学 2025级光电信息工程博士生</span>
+            <span>{{ t('hero.affiliation') }}</span>
           </div>
           <div class="hero-buttons">
             <a href="https://github.com/TiredAce" target="_blank" class="btn btn-github">
@@ -54,7 +55,7 @@
             </a>
             <a href="#contact" @click="scrollTo('contact')" class="btn btn-contact">
               <span>✉</span>
-              <span>联系我</span>
+              <span>{{ t('hero.contactMe') }}</span>
             </a>
           </div>
         </div>
@@ -62,7 +63,7 @@
       <div class="quote-section">
         <p class="quote-en">"Dots become lines when the time clicks."</p>
         <p class="quote-cn">
-          学到的很多东西，都是一个个点，我可能现在不知道怎么用，,也不能预见到底有没有用，但当某一天觉得这些点有用的时候，我会把它们连成一条线。
+          {{ t('hero.quote') }}
         </p>
       </div>
     </section>
@@ -71,25 +72,26 @@
     <section id="about" class="section about-section">
       <div class="section-bg section-bg-about"></div>
       <div class="section-header">
-        <span class="section-icon"></span>
-        <h2 class="section-title">我眼里的我</h2>
+        <span class="section-icon">️
+          🖼️</span>
+        <h2 class="section-title">{{ t('about.selfView') }}</h2>
       </div>
       <div class="about-cards">
         <div class="about-card">
           <div class="card-icon pink">❤</div>
-          <p>喜欢做梦，情绪敏感，心思细腻，涉猎广泛</p>
+          <p>{{ t('about.card1') }}</p>
         </div>
         <div class="about-card">
           <div class="card-icon blue">👁</div>
-          <p>喜欢一切够触动内心的东西</p>
+          <p>{{ t('about.card2') }}</p>
         </div>
         <div class="about-card">
           <div class="card-icon green">🎯</div>
-          <p>做点有价值与有影响力的事情</p>
+          <p>{{ t('about.card3') }}</p>
         </div>
         <div class="about-card">
           <div class="card-icon purple">🔄</div>
-          <p>把AI当作"操作系统"</p>
+          <p>{{ t('about.card4') }}</p>
         </div>
       </div>
 
@@ -97,57 +99,57 @@
         <div class="doing-left">
           <div class="doing-header">
             <span class="doing-emoji">🤔</span>
-            <h3>我现在在做什么</h3>
+            <h3>{{ t('about.doing') }}</h3>
           </div>
           <ul class="doing-list">
             <li>
               <span class="list-number green">1</span>
-              <span>开拓眼界，悉心观察，广度链接</span>
+              <span>{{ t('about.doing1') }}</span>
             </li>
             <li>
               <span class="list-number green">2</span>
-              <span>开源自我， Build in Public</span>
+              <span>{{ t('about.doing2') }}</span>
             </li>
-            <li>
+            <!-- <li>
               <span class="list-number green">3</span>
               <span>研究AI，研究产品，研究创业</span>
-            </li>
+            </li> -->
             <li>
               <span class="list-number green">4</span>
-              <span>写点文字，敲点代码，做点计划</span>
+              <span>{{ t('about.doing4') }}</span>
             </li>
-            <li>
+            <!-- <li>
               <span class="list-number green">5</span>
               <span>学习如何成为一个靠谱的IP</span>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="doing-right">
           <div class="doing-header">
             <span class="doing-emoji">💪</span>
-            <h3>我擅长的事情</h3>
+            <h3>{{ t('about.goodAt') }}</h3>
           </div>
           <ul class="doing-list">
             <li>
               <span class="list-number orange">1</span>
-              <span>收集数据，整理规律，分享洞察</span>
+              <span>{{ t('about.goodAt1') }}</span>
             </li>
             <li>
               <span class="list-number orange">2</span>
-              <span>持续学习，保持思考，快速起步</span>
+              <span>{{ t('about.goodAt2') }}</span>
             </li>
             <li>
               <span class="list-number orange">3</span>
-              <span>观察生活，观察世界，发掘创意</span>
+              <span>{{ t('about.goodAt3') }}</span>
             </li>
-            <li>
+            <!-- <li>
               <span class="list-number orange">4</span>
               <span>即刻起步，小量快跑，迭代优化</span>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
               <span class="list-number orange">5</span>
               <span>从他人的经验中学习</span>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -158,13 +160,13 @@
       <div class="section-bg section-bg-knowledge"></div>
       <div class="section-header">
         <span class="section-icon">🚩</span>
-        <h2 class="section-title gradient-text-blue">知识空间</h2>
+        <h2 class="section-title gradient-text-blue">{{ t('sections.knowledge') }}</h2>
       </div>
       <p class="section-description">
-        这个空间汇集了我在学习过程中遇到的有用且有趣的资源。
+        {{ t('knowledge.description') }}
       </p>
       <p class="section-note">
-        内容会定期更新，说不定会有惊喜哦~
+        {{ t('knowledge.note') }}
       </p>
       <div class="knowledge-grid">
         <template v-for="(item, index) in knowledgeItems" :key="index">
@@ -190,29 +192,31 @@
     <section id="skills" class="section skills-section">
       <div class="section-bg section-bg-skills"></div>
       <div class="section-header">
-        <h2 class="section-title">技能&生活</h2>
+        <span class="section-icon">💻</span>
+        <h2 class="section-title">{{ t('sections.skills') }}</h2>
       </div>
       <div class="skills-content">
         <div class="skills-grid">
           <div class="skill-item">
+            
             <div class="skill-icon">💻</div>
-            <h4>前端开发</h4>
-            <p>Vue3, React, TypeScript</p>
+            <h4>{{ t('skills.frontend') }}</h4>
+            <p>{{ t('skills.frontendDesc') }}</p>
           </div>
           <div class="skill-item">
             <div class="skill-icon">🤖</div>
-            <h4>AI & 机器学习</h4>
-            <p>Pytorch, CV, LLM</p>
+            <h4>{{ t('skills.ai') }}</h4>
+            <p>{{ t('skills.aiDesc') }}</p>
           </div>
           <div class="skill-item">
             <div class="skill-icon">📱</div>
-            <h4>产品设计</h4>
-            <p>用户体验, 产品思维</p>
+            <h4>{{ t('skills.product') }}</h4>
+            <p>{{ t('skills.productDesc') }}</p>
           </div>
           <div class="skill-item">
             <div class="skill-icon">🚀</div>
-            <h4>创业思考</h4>
-            <p>商业模式, 市场分析</p>
+            <h4>{{ t('skills.startup') }}</h4>
+            <p>{{ t('skills.startupDesc') }}</p>
           </div>
         </div>
       </div>
@@ -223,10 +227,10 @@
       <div class="section-bg section-bg-contact"></div>
       <div class="section-header">
         <span class="section-icon">🔍</span>
-        <h2 class="section-title gradient-text-blue">联系方式</h2>
+        <h2 class="section-title gradient-text-blue">{{ t('sections.contact') }}</h2>
       </div>
       <p class="section-description">
-        期待与你交流,一起做些有意思的事情
+        {{ t('contact.description') }}
       </p>
       <div class="contact-grid">
         <template v-for="(item, index) in contactItems" :key="index">
@@ -260,8 +264,34 @@
           <p>• 欢迎分享日常、高光时刻、情绪片段或独特见解</p>
         </div>
       </div> -->
+      <div class="qr-code-container">
+        <div class="qr-code-wrapper">
+          <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
+          <p class="qr-code-text">{{ t('contact.wechat') }}</p>
+        </div>
+      </div>
     </section>
 
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="runtime-display">
+          <span class="runtime-label">{{ t('footer.runtime') }}</span>
+          <span class="runtime-value">{{ runtime.years }}</span>
+          <span class="runtime-unit">{{ isEnglish ? 'Y' : '年' }}</span>
+          <span class="runtime-value">{{ runtime.months }}</span>
+          <span class="runtime-unit">{{ isEnglish ? 'M' : '月' }}</span>
+          <span class="runtime-value">{{ runtime.days }}</span>
+          <span class="runtime-unit">{{ isEnglish ? 'D' : '天' }}</span>
+          <span class="runtime-value">{{ runtime.hours }}</span>
+          <span class="runtime-unit">{{ isEnglish ? 'H' : '时' }}</span>
+          <span class="runtime-value">{{ runtime.minutes }}</span>
+          <span class="runtime-unit">{{ isEnglish ? 'M' : '分' }}</span>
+          <span class="runtime-value">{{ runtime.seconds }}</span>
+          <span class="runtime-unit">{{ isEnglish ? 'S' : '秒' }}</span>
+        </div>
+      </div>
+    </footer>
 
     <!-- 背景装饰 -->
     <div class="bg-decoration"></div>
@@ -270,110 +300,342 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const isScrolled = ref(false)
 const activeSection = ref('home')
+const isDarkTheme = ref(true)
+const isEnglish = ref(false)
 
-const knowledgeItems = [
+// 语言翻译对象
+const translations = {
+  zh: {
+    nav: {
+      home: '首页',
+      about: '关于我',
+      knowledge: '知识空间',
+      skills: '技能&生活',
+      contact: '联系方式'
+    },
+    hero: {
+      name: '我是陈碧辉',
+      desc1: '一名战略驱动、系统化思考、高度务实的机会主义者。',
+      desc2: '一名 AI 原生的年轻人，热爱探索未知领域、收集整理有用的知识并分享。持续发现并实现可以由 AI 加速的问题，希望成为一名优秀的智能体工程师。',
+      affiliation: '南开大学 2025级光电信息工程博士生',
+      contactMe: '联系我',
+      quote: '学到的很多东西，都是一个个点，我可能现在不知道怎么用,也不能预见到底有没有用，但当某一天觉得这些点有用的时候，我会把它们连成一条线。'
+    },
+    sections: {
+      about: '关于我',
+      knowledge: '知识空间',
+      skills: '技能&生活',
+      contact: '联系方式'
+    },
+    knowledge: {
+      description: '这个空间汇集了我在学习过程中遇到的有用且有趣的资源。',
+      note: '内容会定期更新，说不定会有惊喜哦~',
+      items: {
+        ai: { title: '懂AI', description: '记录了我收集到的AI行业的资讯观点与实用干货' },
+        work: { title: '会工作', description: '记录我个人认同的工作方法与思考' },
+        life: { title: '去生活', description: '记录生活中的想和大家分享的一些事件' },
+        psychology: { title: '悉心理', description: '记录一些与心理、心态相关的内容' },
+        coding: { title: '说编程', description: '关于编程中的一些原理、规范、方法' },
+        optics: { title: '学光学', description: '记录我的学生生涯,和一些在此过程中留下的资源' }
+      }
+    },
+    contact: {
+      title: '联系方式',
+      description: '期待与你交流,一起做些有意思的事情',
+      wechat: '微信二维码',
+      items: {
+        wechat: { title: '微信' },
+        email: { title: '邮箱' },
+        github: { title: 'GitHub' },
+        website: { title: '个人网站' }
+      }
+    },
+    about: {
+      title: '关于我',
+      selfView: '我眼里的我',
+      card1: '喜欢做梦，情绪敏感，心思细腻，涉猎广泛',
+      card2: '喜欢一切够触动内心的东西',
+      card3: '做点有价值与有影响力的事情',
+      card4: '把AI当作"操作系统"',
+      doing: '我现在在做什么',
+      goodAt: '我擅长的事情',
+      doing1: '开拓眼界，悉心观察，广度链接',
+      doing2: '开源自我， Build in Public',
+      doing4: '写点文字，敲点代码，做点计划',
+      goodAt1: '收集数据，整理规律，分享洞察',
+      goodAt2: '持续学习，保持思考，快速起步',
+      goodAt3: '观察生活，观察世界，发掘创意'
+    },
+    skills: {
+      frontend: '前端开发',
+      ai: 'AI & 机器学习',
+      product: '产品设计',
+      startup: '创业思考',
+      frontendDesc: 'Vue3, React, TypeScript',
+      aiDesc: 'Pytorch, CV, LLM',
+      productDesc: '用户体验, 产品思维',
+      startupDesc: '商业模式, 市场分析'
+    },
+    footer: {
+      runtime: '网站正常运行:'
+    },
+    theme: {
+      switchToLight: '切换到亮色主题',
+      switchToDark: '切换到暗色主题'
+    }
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      about: 'About',
+      knowledge: 'Knowledge',
+      skills: 'Skills & Life',
+      contact: 'Contact'
+    },
+    hero: {
+      name: "I'm Chen Bihui",
+      desc1: 'A strategically driven, systematic thinking, highly pragmatic opportunist.',
+      desc2: 'An AI-native young person who loves exploring unknown fields, collecting and organizing useful knowledge and sharing it. Continuously discovering and implementing problems that can be accelerated by AI, hoping to become an excellent agent engineer.',
+      affiliation: 'Nankai University 2025 PhD in Optoelectronic Information Engineering',
+      contactMe: 'Contact Me',
+      quote: 'Many things I learned are just dots. I may not know how to use them now, nor can I foresee whether they will be useful. But when I feel these dots are useful one day, I will connect them into a line.'
+    },
+    sections: {
+      about: 'About Me',
+      knowledge: 'Knowledge Space',
+      skills: 'Skills & Life',
+      contact: 'Contact'
+    },
+    knowledge: {
+      description: 'This space brings together useful and interesting resources I encountered during my learning process.',
+      note: 'Content will be updated regularly, there might be surprises~',
+      items: {
+        ai: { title: 'Understand AI', description: 'Records the AI industry insights, opinions and practical knowledge I collected' },
+        work: { title: 'Know Work', description: 'Records the work methods and thinking I personally agree with' },
+        life: { title: 'Live Life', description: 'Records some events in life that I want to share with everyone' },
+        psychology: { title: 'Understand Psychology', description: 'Records content related to psychology and mindset' },
+        coding: { title: 'Talk Coding', description: 'About principles, standards, and methods in programming' },
+        optics: { title: 'Learn Optics', description: 'Records my student career and some resources left in this process' }
+      }
+    },
+    about: {
+      title: 'About Me',
+      selfView: 'Me in My Eyes',
+      card1: 'Love dreaming, emotionally sensitive, thoughtful, widely read',
+      card2: 'Love everything that touches the heart',
+      card3: 'Do something valuable and influential',
+      card4: 'Treat AI as an "operating system"',
+      doing: 'What I\'m Doing Now',
+      goodAt: 'What I\'m Good At',
+      doing1: 'Expand horizons, observe carefully, connect broadly',
+      doing2: 'Open source myself, Build in Public',
+      doing4: 'Write some words, code some code, make some plans',
+      goodAt1: 'Collect data, organize patterns, share insights',
+      goodAt2: 'Keep learning, keep thinking, start quickly',
+      goodAt3: 'Observe life, observe the world, discover creativity'
+    },
+    skills: {
+      frontend: 'Frontend Development',
+      ai: 'AI & Machine Learning',
+      product: 'Product Design',
+      startup: 'Startup Thinking',
+      frontendDesc: 'Vue3, React, TypeScript',
+      aiDesc: 'Pytorch, CV, LLM',
+      productDesc: 'User Experience, Product Thinking',
+      startupDesc: 'Business Model, Market Analysis'
+    },
+    contact: {
+      title: 'Contact',
+      description: 'Looking forward to communicating with you and doing something interesting together',
+      wechat: 'WeChat QR Code',
+      items: {
+        wechat: { title: 'WeChat' },
+        email: { title: 'Email' },
+        github: { title: 'GitHub' },
+        website: { title: 'Personal Website' }
+      }
+    },
+    footer: {
+      runtime: 'Website Running:'
+    },
+    theme: {
+      switchToLight: 'Switch to Light Theme',
+      switchToDark: 'Switch to Dark Theme'
+    }
+  }
+}
+
+// 获取当前语言的翻译
+const t = (key) => {
+  const lang = isEnglish.value ? 'en' : 'zh'
+  const keys = key.split('.')
+  let value = translations[lang]
+  for (const k of keys) {
+    value = value?.[k]
+  }
+  return value || key
+}
+
+// 语言切换函数
+const toggleLanguage = () => {
+  isEnglish.value = !isEnglish.value
+  localStorage.setItem('language', isEnglish.value ? 'en' : 'zh')
+}
+const runtime = ref({
+  years: 0,
+  months: 0,
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+})
+
+// 网站开始运行时间：2025年9月1日 00:00:00
+const startTime = new Date('2025-09-01T00:00:00').getTime()
+let runtimeInterval = null
+
+const updateRuntime = () => {
+  const now = Date.now()
+  const diff = now - startTime
+  
+  if (diff < 0) {
+    // 如果当前时间早于开始时间，显示0
+    runtime.value = {
+      years: 0,
+      months: 0,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0
+    }
+    return
+  }
+  
+  // 计算总秒数
+  const totalSeconds = Math.floor(diff / 1000)
+  const seconds = totalSeconds % 60
+  const totalMinutes = Math.floor(totalSeconds / 60)
+  const minutes = totalMinutes % 60
+  const totalHours = Math.floor(totalMinutes / 60)
+  const hours = totalHours % 24
+  const totalDays = Math.floor(totalHours / 24)
+  
+  // 计算年月日（从开始日期开始计算）
+  const startDate = new Date('2025-09-01T00:00:00')
+  const currentDate = new Date(now)
+  
+  let years = currentDate.getFullYear() - startDate.getFullYear()
+  let months = currentDate.getMonth() - startDate.getMonth()
+  let days = currentDate.getDate() - startDate.getDate()
+  
+  // 调整月份和天数
+  if (days < 0) {
+    months--
+    const lastMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0)
+    days += lastMonth.getDate()
+  }
+  
+  if (months < 0) {
+    years--
+    months += 12
+  }
+  
+  runtime.value = {
+    years,
+    months,
+    days,
+    hours,
+    minutes,
+    seconds
+  }
+}
+
+const knowledgeItemsBase = [
   {
     icon: '🧠',
-    title: '懂AI',
-    description: '记录了我收集到的AI行业的资讯观点与实用干货',
+    key: 'ai',
     color: 'blue',
     link: 'https://ai.feishu.cn/wiki/EpS3wxM5ei7o0jkGPbicbxnSnBh'
   },
   {
     icon: '💼',
-    title: '会工作',
-    description: '记录我个人认同的工作方法与思考',
+    key: 'work',
     color: 'purple',
     link: 'https://ai.feishu.cn/docx/H9NKdV5hOoFJz6x3sSDcdRwznod?from=from_copylink'
   },
   {
     icon: '❤️',
-    title: '去生活',
-    description: '记录生活中的想和大家分享的一些事件',
+    key: 'life',
     color: 'orange',
     link: 'https://ai.feishu.cn/wiki/R5a6wZtDjiDKgak5X0bcd9XBnVb'
   },
-  // {
-  //   icon: '🌍',
-  //   title: '观天下',
-  //   description: '记录脚步丈量过的这片土地',
-  //   color: 'green',
-  //   link: '#'
-  // },
   {
     icon: '⚡',
-    title: '悉心理',
-    description: '记录一些与心理、心态相关的内容',
+    key: 'psychology',
     color: 'yellow',
     link: 'https://ai.feishu.cn/wiki/JY80wysmxiwPxSkGnl5cC8vGnYd'
   },
   {
     icon: '< >',
-    title: '说编程',
-    description: '关于编程中的一些原理、规范、方法',
+    key: 'coding',
     color: 'purple',
     link: 'https://ai.feishu.cn/wiki/ESVnwVDNBiF9nmkkZcecLj07n8g'
   },
-  // {
-  //   icon: '📈',
-  //   title: '悉商业',
-  //   description: '关于市场、创业和产品',
-  //   color: 'green',
-  //   link: '#'
-  // },
   {
     icon: '🎓',
-    title: '学光学',
-    description: '记录我的学生生涯,和一些在此过程中留下的资源',
+    key: 'optics',
     color: 'red',
     link: 'https://ai.feishu.cn/wiki/YnxewONkAiaLalkfdS6cwiAznfh'
   }
 ]
 
-const contactItems = [
+const knowledgeItems = computed(() => {
+  return knowledgeItemsBase.map(item => ({
+    ...item,
+    title: t(`knowledge.items.${item.key}.title`),
+    description: t(`knowledge.items.${item.key}.description`)
+  }))
+})
+
+const contactItemsBase = [
   {
     icon: '💬',
-    title: '微信',
+    key: 'wechat',
     detail: 'buzhihuo2333333',
     colorClass: 'green'
   },
-  // {
-  //   icon: '💙',
-  //   title: 'QQ',
-  //   detail: '1607558792',
-  //   colorClass: 'blue'
-  // },
   {
     icon: '✉️',
-    title: '邮箱',
+    key: 'email',
     detail: 'chenbihui@mail.nankai.edu.cn',
     colorClass: 'purple'
   },
   {
     icon: '🐙',
-    title: 'GitHub',
+    key: 'github',
     detail: 'TiredAce',
     colorClass: 'grey',
     link: 'https://github.com/TiredAce'
   },
-  // {
-  //   icon: '📺',
-  //   title: '哔哩哔哩',
-  //   detail: '87851447',
-  //   colorClass: 'red'
-  // },
   {
     icon: '🌐',
-    title: '个人网站',
+    key: 'website',
     detail: 'chen.blog',
     colorClass: 'orange',
     link: 'https://tired-ace-github-1o4vy2it7-chens-projects-33c6e8ff.vercel.app/'
   }
 ]
+
+const contactItems = computed(() => {
+  return contactItemsBase.map(item => ({
+    ...item,
+    title: t(`contact.items.${item.key}.title`)
+  }))
+})
 
 let isScrolling = false
 let scrollTimeout = null
@@ -418,7 +680,7 @@ const scrollTo = (sectionId, event) => {
     isScrolling = true
     
     // 使用更高效的滚动方式
-    const targetPosition = element.offsetTop - 80 // 减去导航栏高度
+    const targetPosition = element.offsetTop - 20// 减去导航栏高度和间距
     const startPosition = window.scrollY
     const distance = targetPosition - startPosition
     const duration = Math.min(Math.abs(distance) * 0.5, 800) // 根据距离调整时长
@@ -450,15 +712,47 @@ const scrollTo = (sectionId, event) => {
   }
 }
 
+// 主题切换函数
+const toggleTheme = () => {
+  isDarkTheme.value = !isDarkTheme.value
+  document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
+  localStorage.setItem('theme', isDarkTheme.value ? 'dark' : 'light')
+}
+
 onMounted(() => {
+  // 从localStorage读取主题设置
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === 'light') {
+    isDarkTheme.value = false
+    document.documentElement.classList.add('light-theme')
+  } else {
+    isDarkTheme.value = true
+    document.documentElement.classList.remove('light-theme')
+  }
+  
+  // 从localStorage读取语言设置
+  const savedLanguage = localStorage.getItem('language')
+  if (savedLanguage === 'en') {
+    isEnglish.value = true
+  } else {
+    isEnglish.value = false
+  }
+  
   window.addEventListener('scroll', handleScroll)
   handleScroll()
+  // 初始化运行时间
+  updateRuntime()
+  // 每秒更新一次
+  runtimeInterval = setInterval(updateRuntime, 1000)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   if (scrollTimeout) {
     clearTimeout(scrollTimeout)
+  }
+  if (runtimeInterval) {
+    clearInterval(runtimeInterval)
   }
 })
 </script>
@@ -467,9 +761,10 @@ onUnmounted(() => {
 .app {
   position: relative;
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: transparent;
   overflow-x: hidden;
   overflow-y: visible;
+  height: auto;
 }
 
 /* 导航栏 */
@@ -481,7 +776,7 @@ onUnmounted(() => {
   z-index: 1000;
   background: rgba(10, 14, 39, 0.9);
   backdrop-filter: blur(20px);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -577,29 +872,44 @@ onUnmounted(() => {
   cursor: pointer;
   font-size: 1.2rem;
   padding: 0.5rem;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
 }
 
 .icon-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
   transform: scale(1.1);
+}
+
+.theme-toggle {
+  font-size: 1.3rem;
 }
 
 /* 通用区块样式 */
 .section {
   min-height: auto;
-  padding: 5rem 2rem 3rem;
+  padding: 3rem 2rem 2rem;
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden !important;
+  height: auto;
+  z-index: 1;
+  background: transparent;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .section-icon {
-  font-size: 2rem;
+  font-size: 3rem;
   display: inline-block;
   margin-bottom: 1rem;
 }
@@ -661,6 +971,8 @@ onUnmounted(() => {
   align-items: center;
   min-height: 100vh;
   padding: 6rem 2rem 3rem;
+  overflow: visible !important;
+  height: auto;
 }
 
 .hero-content {
@@ -680,22 +992,59 @@ onUnmounted(() => {
 .profile-image {
   width: 300px;
   height: 400px;
-}
-
-.image-placeholder {
-  width: 100%;
-  height: 100%;
-  background: var(--bg-card);
-  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-.placeholder-icon {
-  font-size: 6rem;
-  opacity: 0.5;
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 -15px 40px rgba(102, 126, 234, 0.5),
+    0 -8px 25px rgba(102, 126, 234, 0.7),
+    0 -3px 10px rgba(118, 75, 162, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.profile-image::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 30px;
+  background: radial-gradient(ellipse, rgba(102, 126, 234, 0.7) 0%, rgba(118, 75, 162, 0.5) 30%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(15px);
+  z-index: -1;
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+.profile-photo:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.3),
+    0 -15px 40px rgba(102, 126, 234, 0.5),
+    0 -8px 20px rgba(102, 126, 234, 0.7);
+  border-color: rgba(102, 126, 234, 0.5);
 }
 
 .hero-right {
@@ -778,6 +1127,7 @@ onUnmounted(() => {
 .btn-github {
   background: #24292e;
   color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .btn-contact {
@@ -1204,6 +1554,120 @@ onUnmounted(() => {
   animation: textShake 0.5s ease-in-out;
 }
 
+/* 二维码容器 */
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 0rem 0;
+}
+
+.qr-code-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.qr-code-wrapper:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  border-color: rgba(102, 126, 234, 0.5);
+}
+
+.qr-code-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 15px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 10px;
+  transition: transform 0.3s ease;
+}
+
+.qr-code-wrapper:hover .qr-code-image {
+  transform: scale(1.15);
+}
+
+.qr-code-text {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  margin: 0;
+  text-align: center;
+}
+
+/* 页脚 */
+.footer {
+  padding: 1rem 1rem;
+  text-align: center;
+  /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
+  background: var(--bg-primary);
+  position: relative;
+  bottom: 1rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.runtime-display {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  padding: 1.8rem 2rem;
+  background: var(--bg-card);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.runtime-label {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-right: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+.runtime-value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.runtime-value:hover {
+  transform: scale(1.1);
+}
+
+.runtime-unit {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  opacity: 0.9;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-left: 0.2rem;
+}
+
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -1307,14 +1771,81 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   z-index: -1;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+  background: var(--bg-primary);
   pointer-events: none;
   animation: bgPulse 8s ease-in-out infinite;
   will-change: opacity;
   backface-visibility: hidden;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  transition: background 0.3s ease;
+}
+
+.bg-decoration::before,
+.bg-decoration::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-image: 
+    radial-gradient(4px 4px at 10% 20%, rgba(102, 126, 234, 1), transparent),
+    radial-gradient(4px 4px at 30% 40%, rgba(139, 92, 246, 1), transparent),
+    radial-gradient(3px 3px at 50% 60%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(4px 4px at 70% 30%, rgba(102, 126, 234, 0.9), transparent),
+    radial-gradient(3px 3px at 90% 80%, rgba(118, 75, 162, 0.8), transparent),
+    radial-gradient(4px 4px at 20% 70%, rgba(139, 92, 246, 0.9), transparent),
+    radial-gradient(3px 3px at 60% 10%, rgba(102, 126, 234, 0.8), transparent),
+    radial-gradient(4px 4px at 80% 50%, rgba(118, 75, 162, 1), transparent),
+    radial-gradient(3px 3px at 40% 90%, rgba(139, 92, 246, 0.8), transparent),
+    radial-gradient(4px 4px at 15% 50%, rgba(102, 126, 234, 0.9), transparent),
+    radial-gradient(3px 3px at 55% 25%, rgba(118, 75, 162, 0.8), transparent),
+    radial-gradient(4px 4px at 75% 65%, rgba(139, 92, 246, 1), transparent),
+    radial-gradient(3px 3px at 35% 85%, rgba(102, 126, 234, 0.8), transparent),
+    radial-gradient(4px 4px at 95% 15%, rgba(118, 75, 162, 0.9), transparent),
+    radial-gradient(3px 3px at 5% 45%, rgba(102, 126, 234, 0.8), transparent),
+    radial-gradient(4px 4px at 25% 75%, rgba(139, 92, 246, 0.9), transparent),
+    radial-gradient(3px 3px at 45% 5%, rgba(118, 75, 162, 0.8), transparent),
+    radial-gradient(4px 4px at 65% 95%, rgba(102, 126, 234, 1), transparent),
+    radial-gradient(3px 3px at 85% 55%, rgba(139, 92, 246, 0.8), transparent);
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+  animation: particleMove 20s linear infinite;
+  opacity: 1;
+  z-index: -1;
+}
+
+.bg-decoration::after {
+  background-image: 
+    radial-gradient(3px 3px at 25% 15%, rgba(102, 126, 234, 0.9), transparent),
+    radial-gradient(4px 4px at 45% 55%, rgba(139, 92, 246, 1), transparent),
+    radial-gradient(3px 3px at 65% 25%, rgba(118, 75, 162, 0.8), transparent),
+    radial-gradient(4px 4px at 85% 75%, rgba(102, 126, 234, 0.9), transparent),
+    radial-gradient(3px 3px at 35% 85%, rgba(139, 92, 246, 0.8), transparent),
+    radial-gradient(4px 4px at 55% 35%, rgba(118, 75, 162, 1), transparent),
+    radial-gradient(3px 3px at 75% 65%, rgba(102, 126, 234, 0.8), transparent),
+    radial-gradient(4px 4px at 95% 45%, rgba(139, 92, 246, 0.9), transparent),
+    radial-gradient(3px 3px at 5% 35%, rgba(118, 75, 162, 0.8), transparent),
+    radial-gradient(4px 4px at 65% 75%, rgba(102, 126, 234, 1), transparent),
+    radial-gradient(3px 3px at 12% 65%, rgba(139, 92, 246, 0.8), transparent),
+    radial-gradient(4px 4px at 32% 25%, rgba(102, 126, 234, 0.9), transparent),
+    radial-gradient(3px 3px at 52% 85%, rgba(118, 75, 162, 0.8), transparent),
+    radial-gradient(4px 4px at 72% 45%, rgba(139, 92, 246, 1), transparent),
+    radial-gradient(3px 3px at 92% 15%, rgba(102, 126, 234, 0.8), transparent);
+  animation: particleMove 25s linear infinite reverse;
+  opacity: 0.9;
+  z-index: -1;
+}
+
+@keyframes particleMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 @keyframes bgPulse {
@@ -1338,11 +1869,11 @@ onUnmounted(() => {
 /* 首页 - 流动的渐变波浪 */
 .section-bg-home {
   background: 
-    radial-gradient(circle 400px at 20% 30%, rgba(102, 126, 234, 0.4) 0%, transparent 50%),
-    radial-gradient(circle 400px at 80% 70%, rgba(118, 75, 162, 0.4) 0%, transparent 50%),
-    radial-gradient(circle 300px at 50% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 60%);
+    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(102, 126, 234, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 500px 350px at 80% 70%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(118, 75, 162, 0.25) 0%, transparent 70%);
   background-size: 200% 200%;
-  animation: waveFlow 15s ease-in-out infinite;
+  animation: waveFlow 18s ease-in-out infinite;
 }
 
 @keyframes waveFlow {
@@ -1357,42 +1888,49 @@ onUnmounted(() => {
 /* 关于我 - 旋转的圆形粒子 */
 .section-bg-about {
   background: 
-    radial-gradient(circle 300px at 30% 40%, rgba(236, 72, 153, 0.4) 0%, transparent 50%),
-    radial-gradient(circle 300px at 70% 60%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
-    radial-gradient(circle 250px at 50% 20%, rgba(34, 197, 94, 0.3) 0%, transparent 50%),
-    radial-gradient(circle 200px at 20% 80%, rgba(139, 92, 246, 0.3) 0%, transparent 50%);
-  animation: rotateParticles 20s linear infinite;
+    radial-gradient(circle 350px at 25% 35%, rgba(118, 75, 162, 0.35) 0%, transparent 55%),
+    radial-gradient(circle 320px at 75% 65%, rgba(102, 126, 234, 0.35) 0%, transparent 55%),
+    radial-gradient(circle 280px at 50% 15%, rgba(139, 92, 246, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 240px at 15% 85%, rgba(118, 75, 162, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 200px at 85% 25%, rgba(102, 126, 234, 0.25) 0%, transparent 55%);
+  background-size: 120% 120%;
+  animation: rotateParticles 25s linear infinite;
 }
 
 @keyframes rotateParticles {
   0% {
     transform: rotate(0deg) scale(1);
+    background-position: 25% 35%, 75% 65%, 50% 15%, 15% 85%, 85% 25%;
   }
   50% {
-    transform: rotate(180deg) scale(1.2);
+    transform: rotate(180deg) scale(1.15);
+    background-position: 75% 65%, 25% 35%, 15% 85%, 85% 25%, 50% 15%;
   }
   100% {
     transform: rotate(360deg) scale(1);
+    background-position: 25% 35%, 75% 65%, 50% 15%, 15% 85%, 85% 25%;
   }
 }
 
 /* 知识空间 - 闪烁的星星效果 */
 .section-bg-knowledge {
   background: 
-    radial-gradient(4px 4px at 20% 30%, rgba(102, 126, 234, 1) 0%, transparent 50%),
-    radial-gradient(4px 4px at 60% 70%, rgba(139, 92, 246, 1) 0%, transparent 50%),
-    radial-gradient(3px 3px at 50% 50%, rgba(255, 255, 255, 0.9) 0%, transparent 50%),
-    radial-gradient(3px 3px at 80% 10%, rgba(102, 126, 234, 0.8) 0%, transparent 50%),
-    radial-gradient(4px 4px at 90% 60%, rgba(139, 92, 246, 1) 0%, transparent 50%),
-    radial-gradient(3px 3px at 10% 80%, rgba(118, 75, 162, 0.8) 0%, transparent 50%),
-    radial-gradient(3px 3px at 40% 20%, rgba(102, 126, 234, 0.8) 0%, transparent 50%),
-    radial-gradient(4px 4px at 70% 90%, rgba(139, 92, 246, 1) 0%, transparent 50%);
-  background-size: 200% 200%;
-  animation: twinkle 3s ease-in-out infinite, starMove 20s linear infinite;
+    radial-gradient(5px 5px at 15% 25%, rgba(139, 92, 246, 0.9) 0%, transparent 60%),
+    radial-gradient(4px 4px at 55% 65%, rgba(102, 126, 234, 0.9) 0%, transparent 60%),
+    radial-gradient(6px 6px at 45% 45%, rgba(118, 75, 162, 0.8) 0%, transparent 60%),
+    radial-gradient(4px 4px at 75% 15%, rgba(139, 92, 246, 0.85) 0%, transparent 60%),
+    radial-gradient(5px 5px at 85% 55%, rgba(102, 126, 234, 0.9) 0%, transparent 60%),
+    radial-gradient(4px 4px at 5% 75%, rgba(118, 75, 162, 0.85) 0%, transparent 60%),
+    radial-gradient(5px 5px at 35% 15%, rgba(139, 92, 246, 0.8) 0%, transparent 60%),
+    radial-gradient(4px 4px at 65% 85%, rgba(102, 126, 234, 0.9) 0%, transparent 60%),
+    radial-gradient(6px 6px at 25% 60%, rgba(118, 75, 162, 0.85) 0%, transparent 60%),
+    radial-gradient(4px 4px at 95% 40%, rgba(139, 92, 246, 0.8) 0%, transparent 60%);
+  background-size: 150% 150%;
+  animation: twinkle 4s ease-in-out infinite, starMove 25s linear infinite;
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.4; }
+  0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
 
@@ -1404,25 +1942,35 @@ onUnmounted(() => {
 /* 技能与生活 - 流动的线条 */
 .section-bg-skills {
   background: 
-    linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.3) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.3) 50%, transparent 70%),
-    linear-gradient(135deg, transparent 40%, rgba(118, 75, 162, 0.2) 50%, transparent 60%);
-  background-size: 300% 300%;
-  animation: lineFlow 10s linear infinite;
+    linear-gradient(45deg, transparent 30%, rgba(102, 126, 234, 0.15) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(139, 92, 246, 0.15) 50%, transparent 70%),
+    linear-gradient(135deg, transparent 40%, rgba(118, 75, 162, 0.12) 50%, transparent 60%),
+    linear-gradient(90deg, transparent 20%, rgba(102, 126, 234, 0.1) 50%, transparent 80%),
+    linear-gradient(0deg, transparent 25%, rgba(139, 92, 246, 0.12) 50%, transparent 75%);
+  background-size: 300% 300%, 250% 250%, 200% 200%, 350% 350%, 280% 280%;
+  animation: lineFlow 20s ease-in-out infinite;
 }
 
 @keyframes lineFlow {
-  0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
-  100% { background-position: 100% 100%, 0% 0%, 50% 50%; }
+  0% { 
+    background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; 
+  }
+  50% { 
+    background-position: 100% 100%, 0% 0%, 50% 50%, 100% 0%, 0% 100%; 
+  }
+  100% { 
+    background-position: 0% 0%, 100% 100%, 50% 50%, 0% 100%, 100% 0%; 
+  }
 }
 
 /* 联系方式 - 脉冲的圆形波纹 */
 .section-bg-contact {
   background: 
-    radial-gradient(circle 400px at 50% 50%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
-    radial-gradient(circle 350px at 30% 70%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
-    radial-gradient(circle 350px at 70% 30%, rgba(118, 75, 162, 0.3) 0%, transparent 50%);
-  animation: pulseRipple 4s ease-in-out infinite;
+    radial-gradient(circle 450px at 50% 50%, rgba(118, 75, 162, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 380px at 25% 75%, rgba(102, 126, 234, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 380px at 75% 25%, rgba(139, 92, 246, 0.3) 0%, transparent 55%),
+    radial-gradient(circle 320px at 50% 50%, rgba(118, 75, 162, 0.2) 0%, transparent 60%);
+  animation: pulseRipple 5s ease-in-out infinite;
 }
 
 @keyframes pulseRipple {
@@ -1431,8 +1979,8 @@ onUnmounted(() => {
     opacity: 0.5;
   }
   50% {
-    transform: scale(1.3);
-    opacity: 0.8;
+    transform: scale(1.25);
+    opacity: 0.75;
   }
 }
 

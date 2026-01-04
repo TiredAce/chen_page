@@ -19,11 +19,52 @@
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+:root.light-theme {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #ffffff;
+  --bg-card: rgba(0, 0, 0, 0.05);
+  --text-primary: #1a1a2e;
+  --text-secondary: rgba(26, 26, 46, 0.7);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* 亮色主题下的导航栏 */
+.light-theme .navbar {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .navbar.scrolled {
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 亮色主题下的GitHub按钮 */
+.light-theme .btn-github {
+  background: #24292e !important;
+  color: #ffffff !important;
+}
+
+/* 亮色主题下技能section的边框改为透明 */
+.light-theme .skill-item::before {
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)) !important;
+}
+
+/* 亮色主题下技能section的背景改为透明 */
+.light-theme .section-bg-skills {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(0, 0, 0, 0.0) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(0, 0, 0, 0.0) 50%, transparent 70%),
+    linear-gradient(135deg, transparent 40%, rgba(0, 0, 0, 0.0) 50%, transparent 60%) !important;
+}
+
 html {
   border: none;
   outline: none;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
+  height: 100%;
 }
 
 body {
@@ -35,17 +76,19 @@ body {
   line-height: 1.6;
   background: var(--bg-primary);
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: visible;
   border: none;
   outline: none;
   margin: 0;
   padding: 0;
+  height: auto;
 }
 
 #app {
   min-height: 100vh;
   position: relative;
   overflow: visible;
+  height: auto;
 }
 
 /* 滚动条样式 */
