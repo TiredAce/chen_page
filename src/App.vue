@@ -20,9 +20,65 @@
           <button class="icon-btn theme-toggle" @click="toggleTheme" :title="isDarkTheme ? t('theme.switchToLight') : t('theme.switchToDark')">
             {{ isDarkTheme ? '🌙' : '☀' }}
           </button>
+          <button class="icon-btn mobile-menu-btn" @click="toggleMobileMenu" title="菜单">
+            <span class="hamburger" :class="{ active: isMobileMenuOpen }">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
         </div>
       </div>
     </nav>
+
+    <!-- 移动端遮罩层 -->
+    <div 
+      v-if="isMobileMenuOpen" 
+      class="mobile-menu-overlay" 
+      @click="closeMobileMenu"
+    ></div>
+
+    <!-- 移动端左侧菜单 -->
+    <div class="mobile-menu" :class="{ open: isMobileMenuOpen }">
+      <div class="mobile-menu-header">
+        <div class="mobile-menu-logo">
+          <div class="logo-icon">🧠</div>
+        </div>
+        <button class="mobile-menu-close" @click="closeMobileMenu">×</button>
+      </div>
+      <nav class="mobile-menu-nav">
+        <a href="#home" @click="handleMobileNavClick('home')" :class="{ active: activeSection === 'home' }">
+          <span class="nav-icon">🏠</span>
+          <span>{{ t('nav.home') }}</span>
+        </a>
+        <a href="#about" @click="handleMobileNavClick('about')" :class="{ active: activeSection === 'about' }">
+          <span class="nav-icon">👤</span>
+          <span>{{ t('nav.about') }}</span>
+        </a>
+        <a href="#knowledge" @click="handleMobileNavClick('knowledge')" :class="{ active: activeSection === 'knowledge' }">
+          <span class="nav-icon">📚</span>
+          <span>{{ t('nav.knowledge') }}</span>
+        </a>
+        <a href="#skills" @click="handleMobileNavClick('skills')" :class="{ active: activeSection === 'skills' }">
+          <span class="nav-icon">💻</span>
+          <span>{{ t('nav.skills') }}</span>
+        </a>
+        <a href="#contact" @click="handleMobileNavClick('contact')" :class="{ active: activeSection === 'contact' }">
+          <span class="nav-icon">📧</span>
+          <span>{{ t('nav.contact') }}</span>
+        </a>
+      </nav>
+      <div class="mobile-menu-actions">
+        <button class="mobile-action-btn" @click="toggleLanguage">
+          <span>{{ isEnglish ? '中' : 'EN' }}</span>
+          <span>{{ isEnglish ? '切换到中文' : 'Switch to English' }}</span>
+        </button>
+        <button class="mobile-action-btn" @click="toggleTheme">
+          <span>{{ isDarkTheme ? '☀' : '🌙' }}</span>
+          <span>{{ isDarkTheme ? t('theme.switchToLight') : t('theme.switchToDark') }}</span>
+        </button>
+      </div>
+    </div>
 
     <!-- 首页部分 -->
     <section id="home" class="section hero-section">
@@ -306,6 +362,7 @@ const isScrolled = ref(false)
 const activeSection = ref('home')
 const isDarkTheme = ref(true)
 const isEnglish = ref(false)
+const isMobileMenuOpen = ref(false)
 
 // 语言翻译对象
 const translations = {
@@ -484,6 +541,26 @@ const t = (key) => {
 const toggleLanguage = () => {
   isEnglish.value = !isEnglish.value
   localStorage.setItem('language', isEnglish.value ? 'en' : 'zh')
+}
+
+// 移动端菜单控制
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  if (isMobileMenuOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
+
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false
+  document.body.style.overflow = ''
+}
+
+const handleMobileNavClick = (sectionId) => {
+  scrollTo(sectionId)
+  closeMobileMenu()
 }
 const runtime = ref({
   years: 0,
@@ -754,6 +831,8 @@ onUnmounted(() => {
   if (runtimeInterval) {
     clearInterval(runtimeInterval)
   }
+  // 清理移动端菜单状态
+  document.body.style.overflow = ''
 })
 </script>
 
@@ -863,6 +942,186 @@ onUnmounted(() => {
 .nav-actions {
   display: flex;
   gap: 1rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 24px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 100%;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* 移动端遮罩层 */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1998;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 移动端左侧菜单 */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: var(--bg-secondary);
+  backdrop-filter: blur(20px);
+  z-index: 1999;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mobile-menu-close {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-nav {
+  flex: 1;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu-nav a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.mobile-menu-nav a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.mobile-menu-nav a.active {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--text-primary);
+  border-left-color: var(--gradient-primary);
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+}
+
+.mobile-menu-actions {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mobile-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.mobile-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.mobile-action-btn span:first-child {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
 }
 
 .icon-btn {
@@ -1987,16 +2246,19 @@ onUnmounted(() => {
 /* 响应式设计 */
 @media (max-width: 768px) {
   .navbar {
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 2rem);
-    max-width: 600px;
+    top: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
   }
 
   .nav-container {
-    flex-wrap: wrap;
-    padding: 0.6rem 1rem;
+    padding: 0.8rem 1rem;
     gap: 1rem;
   }
 
@@ -2005,12 +2267,21 @@ onUnmounted(() => {
   }
 
   .nav-links {
-    gap: 0.8rem;
-    font-size: 0.85rem;
+    display: none;
   }
 
   .nav-actions {
     gap: 0.5rem;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-btn:not(.mobile-menu-btn) {
+    display: none;
   }
 
   .hero-content {

@@ -46,6 +46,48 @@
   color: #ffffff !important;
 }
 
+/* 亮色主题下移动端菜单 */
+.light-theme .mobile-menu {
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.light-theme .mobile-menu-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .mobile-menu-nav a {
+  color: rgba(26, 26, 46, 0.7) !important;
+}
+
+.light-theme .mobile-menu-nav a:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+.light-theme .mobile-menu-nav a.active {
+  background: rgba(102, 126, 234, 0.1) !important;
+  color: var(--text-primary) !important;
+}
+
+.light-theme .mobile-menu-actions {
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .mobile-action-btn {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .mobile-action-btn:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.light-theme .mobile-menu-close:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
 /* 亮色主题下技能section的边框改为透明 */
 .light-theme .skill-item::before {
   background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)) !important;
