@@ -1,5 +1,28 @@
 <template>
   <div class="app">
+    <!-- 加载动画 -->
+    <div v-if="isLoading" class="loading-screen">
+      <div class="loading-content">
+        <div class="loading-logo">
+          <div class="logo-brain">🧠</div>
+          <div class="logo-ring"></div>
+          <div class="logo-ring ring-2"></div>
+          <div class="logo-ring ring-3"></div>
+        </div>
+        <div class="loading-text">
+          <span class="loading-text-char" v-for="(char, index) in loadingText" :key="index" :style="{ animationDelay: index * 0.1 + 's' }">
+            {{ char }}
+          </span>
+        </div>
+        <div class="loading-progress">
+          <div class="progress-bar"></div>
+        </div>
+        <div class="loading-particles">
+          <div class="particle" v-for="i in 20" :key="i" :style="getParticleStyle(i)"></div>
+        </div>
+      </div>
+    </div>
+    
     <!-- 导航栏 -->
     <nav class="navbar" :class="{ scrolled: isScrolled }">
       <div class="nav-container">
@@ -95,17 +118,18 @@
         </div>
         <div class="hero-right">
           <h1 class="hero-title">
+            <span class="section-icon">✨</span> 
             <span class="gradient-text-green">Hi! </span>
             <span class="gradient-text-blue"> {{ t('hero.name') }}</span>
           </h1>
-          <p class="hero-description">
+          <p class="hero-description-1">
             {{ t('hero.desc1') }}
           </p>
           <p class="hero-description">
             {{ t('hero.desc2') }}
           </p>
           <div class="hero-affiliation">
-            <span class="affiliation-icon">◎</span>
+            <span class="affiliation-icon">📍</span>
             <span>{{ t('hero.affiliation') }}</span>
           </div>
           <div class="hero-buttons">
@@ -136,20 +160,22 @@
           🖼️</span>
         <h2 class="section-title">{{ t('about.selfView') }}</h2>
       </div>
-      <div class="about-cards">
-        <div class="about-card">
-          <div class="card-icon pink">❤</div>
+      <div class="about-cards" ref="aboutCardsRef">
+        <div class="about-card about-card-left">
+          <div class="card-icon pink">
+            💤</div>
           <p>{{ t('about.card1') }}</p>
         </div>
-        <div class="about-card">
-          <div class="card-icon blue">👁</div>
+        <div class="about-card about-card-right">
+          <div class="card-icon blue">
+            💭</div>
           <p>{{ t('about.card2') }}</p>
         </div>
-        <div class="about-card">
+        <div class="about-card about-card-left">
           <div class="card-icon green">🎯</div>
           <p>{{ t('about.card3') }}</p>
         </div>
-        <div class="about-card">
+        <div class="about-card about-card-right">
           <div class="card-icon purple">🔄</div>
           <p>{{ t('about.card4') }}</p>
         </div>
@@ -161,7 +187,7 @@
             <span class="doing-emoji">🤔</span>
             <h3>{{ t('about.doing') }}</h3>
           </div>
-          <ul class="doing-list">
+          <ul class="doing-list" ref="doingLeftListRef">
             <li>
               <span class="list-number green">1</span>
               <span>{{ t('about.doing1') }}</span>
@@ -190,7 +216,7 @@
             <span class="doing-emoji">💪</span>
             <h3>{{ t('about.goodAt') }}</h3>
           </div>
-          <ul class="doing-list">
+          <ul class="doing-list" ref="doingRightListRef">
             <li>
               <span class="list-number orange">1</span>
               <span>{{ t('about.goodAt1') }}</span>
@@ -229,7 +255,7 @@
       <p class="section-note">
         {{ t('knowledge.note') }}
       </p>
-      <div class="knowledge-grid">
+      <div class="knowledge-grid" ref="knowledgeGridRef">
         <template v-for="(item, index) in knowledgeItems" :key="index">
           <a v-if="item.link" :href="item.link" target="_blank" class="knowledge-card">
             <div class="knowledge-icon" :class="item.color">
@@ -257,7 +283,7 @@
         <h2 class="section-title">{{ t('sections.skills') }}</h2>
       </div>
       <div class="skills-content">
-        <div class="skills-grid">
+        <div class="skills-grid" ref="skillsGridRef">
           <div class="skill-item">
             
             <div class="skill-icon">💻</div>
@@ -293,7 +319,7 @@
       <p class="section-description">
         {{ t('contact.description') }}
       </p>
-      <div class="contact-grid">
+      <div class="contact-grid" ref="contactGridRef">
         <template v-for="(item, index) in contactItems" :key="index">
           <a v-if="item.link" :href="item.link" target="_blank" class="contact-card">
             <div class="contact-icon" :class="item.colorClass">
@@ -325,7 +351,7 @@
           <p>• 欢迎分享日常、高光时刻、情绪片段或独特见解</p>
         </div>
       </div> -->
-      <div class="qr-code-container">
+      <div class="qr-code-container" ref="qrCodeContainerRef">
         <div class="qr-code-wrapper">
           <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
           <p class="qr-code-text">{{ t('contact.wechat') }}</p>
@@ -338,18 +364,72 @@
       <div class="footer-content">
         <div class="runtime-display">
           <span class="runtime-label">{{ t('footer.runtime') }}</span>
-          <span class="runtime-value">{{ runtime.years }}</span>
-          <span class="runtime-unit">{{ isEnglish ? 'Y' : '年' }}</span>
-          <span class="runtime-value">{{ runtime.months }}</span>
-          <span class="runtime-unit">{{ isEnglish ? 'M' : '月' }}</span>
-          <span class="runtime-value">{{ runtime.days }}</span>
-          <span class="runtime-unit">{{ isEnglish ? 'D' : '天' }}</span>
-          <span class="runtime-value">{{ runtime.hours }}</span>
-          <span class="runtime-unit">{{ isEnglish ? 'H' : '时' }}</span>
-          <span class="runtime-value">{{ runtime.minutes }}</span>
-          <span class="runtime-unit">{{ isEnglish ? 'M' : '分' }}</span>
-          <span class="runtime-value">{{ runtime.seconds }}</span>
-          <span class="runtime-unit">{{ isEnglish ? 'S' : '秒' }}</span>
+          
+          <!-- 年 -->
+          <div class="flip-clock-item">
+            <div class="flip-card" :class="{ 'flip': flipStates.years }">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><span>{{ String(prevRuntime.years).padStart(2, '0') }}</span></div>
+                <div class="flip-card-back"><span>{{ String(runtime.years).padStart(2, '0') }}</span></div>
+              </div>
+            </div>
+            <span class="runtime-unit">{{ isEnglish ? 'Y' : '年' }}</span>
+          </div>
+          
+          <!-- 月 -->
+          <div class="flip-clock-item">
+            <div class="flip-card" :class="{ 'flip': flipStates.months }">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><span>{{ String(prevRuntime.months).padStart(2, '0') }}</span></div>
+                <div class="flip-card-back"><span>{{ String(runtime.months).padStart(2, '0') }}</span></div>
+              </div>
+            </div>
+            <span class="runtime-unit">{{ isEnglish ? 'M' : '月' }}</span>
+          </div>
+          
+          <!-- 天 -->
+          <div class="flip-clock-item">
+            <div class="flip-card" :class="{ 'flip': flipStates.days }">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><span>{{ String(prevRuntime.days).padStart(2, '0') }}</span></div>
+                <div class="flip-card-back"><span>{{ String(runtime.days).padStart(2, '0') }}</span></div>
+              </div>
+            </div>
+            <span class="runtime-unit">{{ isEnglish ? 'D' : '天' }}</span>
+          </div>
+          
+          <!-- 时 -->
+          <div class="flip-clock-item">
+            <div class="flip-card" :class="{ 'flip': flipStates.hours }">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><span>{{ String(prevRuntime.hours).padStart(2, '0') }}</span></div>
+                <div class="flip-card-back"><span>{{ String(runtime.hours).padStart(2, '0') }}</span></div>
+              </div>
+            </div>
+            <span class="runtime-unit">{{ isEnglish ? 'H' : '时' }}</span>
+          </div>
+          
+          <!-- 分 -->
+          <div class="flip-clock-item">
+            <div class="flip-card" :class="{ 'flip': flipStates.minutes }">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><span>{{ String(prevRuntime.minutes).padStart(2, '0') }}</span></div>
+                <div class="flip-card-back"><span>{{ String(runtime.minutes).padStart(2, '0') }}</span></div>
+              </div>
+            </div>
+            <span class="runtime-unit">{{ isEnglish ? 'M' : '分' }}</span>
+          </div>
+          
+          <!-- 秒 -->
+          <div class="flip-clock-item">
+            <div class="flip-card" :class="{ 'flip': flipStates.seconds }">
+              <div class="flip-card-inner">
+                <div class="flip-card-front"><span>{{ String(prevRuntime.seconds).padStart(2, '0') }}</span></div>
+                <div class="flip-card-back"><span>{{ String(runtime.seconds).padStart(2, '0') }}</span></div>
+              </div>
+            </div>
+            <span class="runtime-unit">{{ isEnglish ? 'S' : '秒' }}</span>
+          </div>
         </div>
       </div>
     </footer>
@@ -368,6 +448,22 @@ const activeSection = ref('home')
 const isDarkTheme = ref(true)
 const isEnglish = ref(false)
 const isMobileMenuOpen = ref(false)
+const isLoading = ref(true)
+const loadingText = 'Loading...'
+const aboutCardsRef = ref(null)
+const aboutCardsAnimated = ref(false)
+const doingLeftListRef = ref(null)
+const doingRightListRef = ref(null)
+const doingLeftListAnimated = ref(false)
+const doingRightListAnimated = ref(false)
+const knowledgeGridRef = ref(null)
+const knowledgeGridAnimated = ref(false)
+const skillsGridRef = ref(null)
+const skillsGridAnimated = ref(false)
+const contactGridRef = ref(null)
+const contactGridAnimated = ref(false)
+const qrCodeContainerRef = ref(null)
+const qrCodeContainerAnimated = ref(false)
 
 // 语言翻译对象
 const translations = {
@@ -576,6 +672,24 @@ const runtime = ref({
   seconds: 0
 })
 
+const prevRuntime = ref({
+  years: 0,
+  months: 0,
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+})
+
+const flipStates = ref({
+  years: false,
+  months: false,
+  days: false,
+  hours: false,
+  minutes: false,
+  seconds: false
+})
+
 // 网站开始运行时间：2025年9月1日 00:00:00
 const startTime = new Date('2025-09-01T00:00:00').getTime()
 let runtimeInterval = null
@@ -626,6 +740,10 @@ const updateRuntime = () => {
     months += 12
   }
   
+  // 保存前一个值用于翻页动画（在更新之前）
+  const oldValues = { ...runtime.value }
+  
+  // 更新运行时间值
   runtime.value = {
     years,
     months,
@@ -633,6 +751,50 @@ const updateRuntime = () => {
     hours,
     minutes,
     seconds
+  }
+  
+  // 检查每个值是否变化，触发翻页动画（只在值真正变化时触发一次）
+  if (oldValues.years !== years && !flipStates.value.years) {
+    flipStates.value.years = true
+    setTimeout(() => { 
+      flipStates.value.years = false
+      prevRuntime.value.years = years
+    }, 600)
+  }
+  if (oldValues.months !== months && !flipStates.value.months) {
+    flipStates.value.months = true
+    setTimeout(() => { 
+      flipStates.value.months = false
+      prevRuntime.value.months = months
+    }, 600)
+  }
+  if (oldValues.days !== days && !flipStates.value.days) {
+    flipStates.value.days = true
+    setTimeout(() => { 
+      flipStates.value.days = false
+      prevRuntime.value.days = days
+    }, 600)
+  }
+  if (oldValues.hours !== hours && !flipStates.value.hours) {
+    flipStates.value.hours = true
+    setTimeout(() => { 
+      flipStates.value.hours = false
+      prevRuntime.value.hours = hours
+    }, 600)
+  }
+  if (oldValues.minutes !== minutes && !flipStates.value.minutes) {
+    flipStates.value.minutes = true
+    setTimeout(() => { 
+      flipStates.value.minutes = false
+      prevRuntime.value.minutes = minutes
+    }, 600)
+  }
+  if (oldValues.seconds !== seconds && !flipStates.value.seconds) {
+    flipStates.value.seconds = true
+    setTimeout(() => { 
+      flipStates.value.seconds = false
+      prevRuntime.value.seconds = seconds
+    }, 600)
   }
 }
 
@@ -801,7 +963,26 @@ const toggleTheme = () => {
   localStorage.setItem('theme', isDarkTheme.value ? 'dark' : 'light')
 }
 
+// 生成粒子样式
+const getParticleStyle = (index) => {
+  const angle = (index / 20) * 360
+  const radius = 150 + Math.random() * 50
+  const x = Math.cos((angle * Math.PI) / 180) * radius
+  const y = Math.sin((angle * Math.PI) / 180) * radius
+  const delay = Math.random() * 2
+  const duration = 3 + Math.random() * 2
+  return {
+    left: `calc(50% + ${x}px)`,
+    top: `calc(50% + ${y}px)`,
+    animationDelay: `${delay}s`,
+    animationDuration: `${duration}s`
+  }
+}
+
 onMounted(() => {
+  // 加载时禁用滚动
+  document.body.style.overflow = 'hidden'
+  
   // 从localStorage读取主题设置
   const savedTheme = localStorage.getItem('theme')
   if (savedTheme === 'light') {
@@ -820,12 +1001,182 @@ onMounted(() => {
     isEnglish.value = false
   }
   
+  // 加载动画：至少显示 1.5 秒，然后淡出
+  setTimeout(() => {
+    isLoading.value = false
+    document.body.style.overflow = ''
+  }, 2000)
+  
+  // 加载动画：至少显示 1.5 秒，然后淡出
+  setTimeout(() => {
+    isLoading.value = false
+    document.body.style.overflow = ''
+  }, 2000)
+  
   window.addEventListener('scroll', handleScroll)
   handleScroll()
   // 初始化运行时间
   updateRuntime()
+  // 初始化前一个值
+  prevRuntime.value = { ...runtime.value }
   // 每秒更新一次
   runtimeInterval = setInterval(updateRuntime, 1000)
+  
+  // 设置 about-cards 的 Intersection Observer
+  if (aboutCardsRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !aboutCardsAnimated.value) {
+            aboutCardsAnimated.value = true
+            entry.target.classList.add('cards-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(aboutCardsRef.value)
+  }
+  
+  // 设置左侧列表的 Intersection Observer
+  if (doingLeftListRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !doingLeftListAnimated.value) {
+            doingLeftListAnimated.value = true
+            entry.target.classList.add('list-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(doingLeftListRef.value)
+  }
+  
+  // 设置右侧列表的 Intersection Observer
+  if (doingRightListRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !doingRightListAnimated.value) {
+            doingRightListAnimated.value = true
+            entry.target.classList.add('list-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(doingRightListRef.value)
+  }
+  
+  // 为所有 section 的 header 添加从下到上的进入动画
+  const sections = document.querySelectorAll('.section')
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionHeader = entry.target.querySelector('.section-header')
+          if (sectionHeader && !sectionHeader.classList.contains('header-visible')) {
+            sectionHeader.classList.add('header-visible')
+          }
+        }
+      })
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  )
+  
+  sections.forEach((section) => {
+    sectionObserver.observe(section)
+  })
+  
+  // 设置 knowledge-grid 的 Intersection Observer
+  if (knowledgeGridRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !knowledgeGridAnimated.value) {
+            knowledgeGridAnimated.value = true
+            entry.target.classList.add('grid-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(knowledgeGridRef.value)
+  }
+  
+  // 设置 skills-grid 的 Intersection Observer
+  if (skillsGridRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !skillsGridAnimated.value) {
+            skillsGridAnimated.value = true
+            entry.target.classList.add('grid-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(skillsGridRef.value)
+  }
+  
+  // 设置 contact-grid 的 Intersection Observer
+  if (contactGridRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !contactGridAnimated.value) {
+            contactGridAnimated.value = true
+            entry.target.classList.add('grid-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(contactGridRef.value)
+  }
+  
+  // 设置 qr-code-container 的 Intersection Observer
+  if (qrCodeContainerRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !qrCodeContainerAnimated.value) {
+            qrCodeContainerAnimated.value = true
+            entry.target.classList.add('container-visible')
+          }
+        })
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+      }
+    )
+    observer.observe(qrCodeContainerRef.value)
+  }
 })
 
 onUnmounted(() => {
@@ -1200,6 +1551,16 @@ onUnmounted(() => {
 .section-header {
   text-align: center;
   margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              opacity 0.8s ease;
+}
+
+/* 当 section 进入视口时，header 从下往上滑入 */
+.section-header.header-visible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .section-icon {
@@ -1353,6 +1714,13 @@ onUnmounted(() => {
   line-height: 1.2;
 }
 
+.hero-description-1 {
+  color: #ffffff;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
 .hero-description {
   color: var(--text-secondary);
   font-size: 1.1rem;
@@ -1468,9 +1836,57 @@ onUnmounted(() => {
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.4s ease,
+              border-color 0.4s ease,
+              background 0.4s ease;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+}
+
+/* 左侧卡片初始状态：从左侧隐藏 */
+.about-card-left {
+  transform: translateX(-100px);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              opacity 0.8s ease,
+              box-shadow 0.3s ease;
+}
+
+/* 右侧卡片初始状态：从右侧隐藏 */
+.about-card-right {
+  transform: translateX(100px);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              opacity 0.8s ease,
+              box-shadow 0.3s ease;
+}
+
+/* 当容器可见时，卡片滑入 */
+.about-cards.cards-visible .about-card-left {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.about-cards.cards-visible .about-card-right {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* 为每个卡片添加延迟，创造依次出现的效果 */
+.about-cards.cards-visible .about-card:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.about-cards.cards-visible .about-card:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.about-cards.cards-visible .about-card:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+.about-cards.cards-visible .about-card:nth-child(4) {
+  transition-delay: 0.4s;
 }
 
 .about-card::before {
@@ -1489,13 +1905,46 @@ onUnmounted(() => {
 }
 
 .about-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--shadow);
-  border-color: rgba(102, 126, 234, 0.5);
+  transform: translateY(-15px) scale(1.08) translateX(0) !important;
+  box-shadow: 0 16px 40px rgba(102, 126, 234, 0.4), 
+              0 8px 20px rgba(139, 92, 246, 0.3),
+              0 4px 12px rgba(118, 75, 162, 0.2);
+  border-color: rgba(102, 126, 234, 0.8);
+  background: linear-gradient(135deg, 
+    var(--bg-card) 0%, 
+    rgba(102, 126, 234, 0.2) 50%, 
+    var(--bg-card) 100%);
+}
+
+/* 为每个卡片设置不同的随机倾斜角度 */
+.about-card:nth-child(1):hover {
+  transform: translateY(-15px) scale(1.08) translateX(0) rotate(-3deg) !important;
+}
+
+.about-card:nth-child(2):hover {
+  transform: translateY(-15px) scale(1.08) translateX(0) rotate(4deg) !important;
+}
+
+.about-card:nth-child(3):hover {
+  transform: translateY(-15px) scale(1.08) translateX(0) rotate(-2deg) !important;
+}
+
+.about-card:nth-child(4):hover {
+  transform: translateY(-15px) scale(1.08) translateX(0) rotate(3deg) !important;
+}
+
+.about-card:hover .card-icon {
+  transform: scale(1.3) rotate(360deg);
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.6));
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              filter 0.4s ease;
 }
 
 .about-card:hover p {
   animation: textShake 0.5s ease-in-out;
+  color: var(--text-primary);
+  font-weight: 600;
+  transform: scale(1.05);
 }
 
 @keyframes textShake {
@@ -1513,6 +1962,8 @@ onUnmounted(() => {
   justify-content: center;
   font-size: 2rem;
   margin: 0 auto 1rem;
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              filter 0.4s ease;
 }
 
 .card-icon.pink {
@@ -1567,17 +2018,81 @@ onUnmounted(() => {
   background: var(--bg-card);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              opacity 0.8s ease,
+              border-color 0.3s ease;
   cursor: pointer;
+  opacity: 0;
+}
+
+/* 左侧列表的 li 初始状态：从左侧隐藏 */
+.doing-left .doing-list li {
+  transform: translateX(-100px);
+}
+
+/* 右侧列表的 li 初始状态：从右侧隐藏 */
+.doing-right .doing-list li {
+  transform: translateX(100px);
+}
+
+/* 当列表可见时，li 滑入 */
+.doing-left .doing-list.list-visible li {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.doing-right .doing-list.list-visible li {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* 为每个 li 添加延迟，创造依次出现的效果 */
+.doing-left .doing-list.list-visible li:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.doing-left .doing-list.list-visible li:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.doing-left .doing-list.list-visible li:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+.doing-right .doing-list.list-visible li:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.doing-right .doing-list.list-visible li:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.doing-right .doing-list.list-visible li:nth-child(3) {
+  transition-delay: 0.3s;
 }
 
 .doing-list li:hover {
-  transform: translateX(10px) scale(1.02);
-  border-color: rgba(102, 126, 234, 0.5);
+  transform: translateX(20px) scale(1.05) !important;
+  border-color: rgba(102, 126, 234, 0.8);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4), 
+              0 4px 12px rgba(139, 92, 246, 0.3);
+  background: linear-gradient(135deg, 
+    var(--bg-card) 0%, 
+    rgba(102, 126, 234, 0.15) 50%, 
+    var(--bg-card) 100%);
+}
+
+.doing-list li:hover .list-number {
+  transform: scale(1.2) rotate(360deg) !important;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              box-shadow 0.3s ease;
 }
 
 .doing-list li:hover span:last-child {
   animation: textShake 0.5s ease-in-out;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .list-number {
@@ -1589,6 +2104,8 @@ onUnmounted(() => {
   justify-content: center;
   font-weight: bold;
   flex-shrink: 0;
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              box-shadow 0.3s ease;
 }
 
 .list-number.green {
@@ -1619,13 +2136,48 @@ onUnmounted(() => {
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.3s ease,
+              opacity 0.6s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
   display: block;
+  opacity: 0;
+  transform: translateY(60px) scale(0.8) rotateX(15deg);
+}
+
+/* 当 grid 可见时，卡片依次出现 */
+.knowledge-grid.grid-visible .knowledge-card {
+  transform: translateY(0) scale(1) rotateX(0deg);
+  opacity: 1;
+}
+
+/* 为每个卡片添加延迟，创造依次出现的效果 */
+.knowledge-grid.grid-visible .knowledge-card:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.knowledge-grid.grid-visible .knowledge-card:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.knowledge-grid.grid-visible .knowledge-card:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+.knowledge-grid.grid-visible .knowledge-card:nth-child(4) {
+  transition-delay: 0.4s;
+}
+
+.knowledge-grid.grid-visible .knowledge-card:nth-child(5) {
+  transition-delay: 0.5s;
+}
+
+.knowledge-grid.grid-visible .knowledge-card:nth-child(6) {
+  transition-delay: 0.6s;
 }
 
 .knowledge-card::after {
@@ -1647,7 +2199,7 @@ onUnmounted(() => {
 }
 
 .knowledge-card:hover {
-  transform: translateY(-5px) scale(1.03);
+  transform: translateY(-5px) scale(1.03) rotateX(0deg) !important;
   box-shadow: var(--shadow);
   border-color: rgba(102, 126, 234, 0.5);
 }
@@ -1732,8 +2284,36 @@ onUnmounted(() => {
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              border-color 0.3s ease,
+              opacity 0.7s ease;
   position: relative;
+  opacity: 0;
+  transform: translateX(-80px) rotateY(-30deg);
+  transform-style: preserve-3d;
+}
+
+/* 当 grid 可见时，skill-item 从左侧旋转进入 */
+.skills-grid.grid-visible .skill-item {
+  transform: translateX(0) rotateY(0deg);
+  opacity: 1;
+}
+
+/* 为每个 skill-item 添加延迟 */
+.skills-grid.grid-visible .skill-item:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.skills-grid.grid-visible .skill-item:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.skills-grid.grid-visible .skill-item:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+.skills-grid.grid-visible .skill-item:nth-child(4) {
+  transition-delay: 0.4s;
 }
 
 .skill-item::before {
@@ -1755,7 +2335,7 @@ onUnmounted(() => {
 }
 
 .skill-item:hover {
-  transform: translateY(-5px) rotate(1deg);
+  transform: translateY(-5px) rotate(1deg) rotateY(0deg) !important;
   border-color: rgba(102, 126, 234, 0.5);
 }
 
@@ -1805,12 +2385,40 @@ onUnmounted(() => {
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.3s ease,
+              opacity 0.7s ease;
   position: relative;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
   display: block;
+  opacity: 0;
+  transform: translateX(80px) rotateY(30deg);
+  transform-style: preserve-3d;
+}
+
+/* 当 grid 可见时，contact-card 从右侧旋转进入 */
+.contact-grid.grid-visible .contact-card {
+  transform: translateX(0) rotateY(0deg);
+  opacity: 1;
+}
+
+/* 为每个 contact-card 添加延迟 */
+.contact-grid.grid-visible .contact-card:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.contact-grid.grid-visible .contact-card:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.contact-grid.grid-visible .contact-card:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+.contact-grid.grid-visible .contact-card:nth-child(4) {
+  transition-delay: 0.4s;
 }
 
 .contact-card::before {
@@ -1835,7 +2443,7 @@ onUnmounted(() => {
 }
 
 .contact-card:hover {
-  transform: translateY(-5px) scale(1.05);
+  transform: translateY(-5px) scale(1.05) rotateY(0deg) !important;
   box-shadow: var(--shadow);
   border-color: rgba(102, 126, 234, 0.5);
 }
@@ -1855,6 +2463,16 @@ onUnmounted(() => {
   align-items: center;
   margin-top: 2rem;
   padding: 0rem 0;
+  opacity: 0;
+  transform: translateY(60px) scale(0.7);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              opacity 0.8s ease;
+}
+
+/* 当 container 可见时，从下方缩放淡入 */
+.qr-code-container.container-visible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .qr-code-wrapper {
@@ -1916,10 +2534,10 @@ onUnmounted(() => {
 .runtime-display {
   display: flex;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  gap: 0.8rem;
-  padding: 1.8rem 2rem;
+  gap: 1rem;
+  padding: 1.3rem 0rem;
   background: var(--bg-card);
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1935,31 +2553,90 @@ onUnmounted(() => {
   letter-spacing: 0.5px;
 }
 
-.runtime-value {
-  font-size: 2.2rem;
-  font-weight: 700;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.2));
-  transition: transform 0.3s ease;
+.flip-clock-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.runtime-value:hover {
-  transform: scale(1.1);
+.flip-card {
+  position: relative;
+  width: 70px;
+  height: 55px;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flip .flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(40, 40, 50, 0.95);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #d0d0d0;
+  line-height: 1;
+  text-align: center;
+  overflow: hidden;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.flip-card-back {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front span,
+.flip-card-back span {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  font-variant-numeric: inherit;
 }
 
 .runtime-unit {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   opacity: 0.9;
   font-weight: 500;
   letter-spacing: 0.5px;
-  margin-left: 0.2rem;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 @keyframes pulse {
@@ -2345,6 +3022,186 @@ onUnmounted(() => {
 
   .contact-guidelines {
     grid-template-columns: 1fr;
+  }
+}
+
+/* 加载动画 */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0a0e27;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeOut 0.5s ease-out 1.5s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.loading-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.loading-logo {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-brain {
+  font-size: 4rem;
+  z-index: 2;
+  animation: pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.8));
+}
+
+.logo-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid;
+  border-image: linear-gradient(45deg, #667eea, #764ba2, #8b5cf6, #667eea) 1;
+  border-radius: 50%;
+  animation: rotate 3s linear infinite;
+}
+
+.logo-ring.ring-2 {
+  width: 140%;
+  height: 140%;
+  border-image: linear-gradient(135deg, #8b5cf6, #ec4899, #667eea, #8b5cf6) 1;
+  animation: rotate 4s linear infinite reverse;
+  opacity: 0.7;
+}
+
+.logo-ring.ring-3 {
+  width: 160%;
+  height: 160%;
+  border-image: linear-gradient(225deg, #38ef7d, #11998e, #667eea, #38ef7d) 1;
+  animation: rotate 5s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #667eea;
+  letter-spacing: 0.2em;
+  display: flex;
+  gap: 0.1rem;
+}
+
+.loading-text-char {
+  display: inline-block;
+  animation: textGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    opacity: 0.5;
+    text-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(102, 126, 234, 1), 0 0 30px rgba(139, 92, 246, 0.8);
+  }
+}
+
+.loading-progress {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2, #8b5cf6);
+  border-radius: 2px;
+  width: 0%;
+  animation: progress 2s ease-out forwards;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.loading-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #667eea, transparent);
+  border-radius: 50%;
+  animation: particleFloat infinite;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, -200px) scale(1);
+    opacity: 0;
   }
 }
 </style>

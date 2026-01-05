@@ -116,6 +116,11 @@
     linear-gradient(135deg, transparent 40%, rgba(0, 0, 0, 0.0) 50%, transparent 60%) !important;
 }
 
+/* 亮色主题下hero-description-1的颜色改为纯黑 */
+.light-theme .hero-description-1 {
+  color: #000000 !important;
+}
+
 html {
   border: none;
   outline: none;
