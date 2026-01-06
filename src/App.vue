@@ -18,7 +18,7 @@
           <div class="progress-bar"></div>
         </div>
         <div class="loading-particles">
-          <div class="particle" v-for="i in 20" :key="i" :style="getParticleStyle(i)"></div>
+          <div class="particle" v-for="i in 10" :key="i" :style="getParticleStyle(i)"></div>
         </div>
       </div>
     </div>
@@ -258,16 +258,16 @@
       <div class="knowledge-grid" ref="knowledgeGridRef">
         <template v-for="(item, index) in knowledgeItems" :key="index">
           <a v-if="item.link" :href="item.link" target="_blank" class="knowledge-card">
-            <div class="knowledge-icon" :class="item.color">
-              {{ item.icon }}
-            </div>
-            <h3 class="knowledge-title">{{ item.title }}</h3>
-            <p class="knowledge-desc">{{ item.description }}</p>
+          <div class="knowledge-icon" :class="item.color">
+            {{ item.icon }}
+          </div>
+          <h3 class="knowledge-title">{{ item.title }}</h3>
+          <p class="knowledge-desc">{{ item.description }}</p>
           </a>
           <div v-else class="knowledge-card">
             <div class="knowledge-icon" :class="item.color">
               {{ item.icon }}
-            </div>
+        </div>
             <h3 class="knowledge-title">{{ item.title }}</h3>
             <p class="knowledge-desc">{{ item.description }}</p>
           </div>
@@ -322,35 +322,21 @@
       <div class="contact-grid" ref="contactGridRef">
         <template v-for="(item, index) in contactItems" :key="index">
           <a v-if="item.link" :href="item.link" target="_blank" class="contact-card">
-            <div class="contact-icon" :class="item.colorClass">
-              {{ item.icon }}
-            </div>
-            <h3 class="contact-title">{{ item.title }}</h3>
-            <p class="contact-detail">{{ item.detail }}</p>
+          <div class="contact-icon" :class="item.colorClass">
+            {{ item.icon }}
+          </div>
+          <h3 class="contact-title">{{ item.title }}</h3>
+          <p class="contact-detail">{{ item.detail }}</p>
           </a>
           <div v-else class="contact-card">
             <div class="contact-icon" :class="item.colorClass">
               {{ item.icon }}
-            </div>
+        </div>
             <h3 class="contact-title">{{ item.title }}</h3>
             <p class="contact-detail">{{ item.detail }}</p>
-          </div>
+      </div>
         </template>
       </div>
-      <!-- <div class="contact-guidelines">
-        <div class="guideline-card">
-          <div class="guideline-icon blue">📁</div>
-          <h4>工作沟通</h4>
-          <p>1. 工作相关的事情,建议直接电话/线上会议/当面沟通,不要发"在吗"</p>
-          <p>2. 直接说明来意,开门见山</p>
-        </div>
-        <div class="guideline-card">
-          <div class="guideline-icon pink">💬</div>
-          <h4>生活交流</h4>
-          <p>• 生活交流可以随意、放松、自然、真实</p>
-          <p>• 欢迎分享日常、高光时刻、情绪片段或独特见解</p>
-        </div>
-      </div> -->
       <div class="qr-code-container" ref="qrCodeContainerRef">
         <div class="qr-code-wrapper">
           <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
@@ -895,17 +881,17 @@ const handleScroll = () => {
     lastScrollTop = currentScrollTop
     
     isScrolled.value = currentScrollTop > 50
-    
-    const sections = ['home', 'about', 'knowledge', 'skills', 'contact']
+  
+  const sections = ['home', 'about', 'knowledge', 'skills', 'contact']
     const scrollPosition = currentScrollTop + 150
-    
-    for (let i = sections.length - 1; i >= 0; i--) {
-      const section = document.getElementById(sections[i])
-      if (section && section.offsetTop <= scrollPosition) {
-        activeSection.value = sections[i]
-        break
-      }
+  
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const section = document.getElementById(sections[i])
+    if (section && section.offsetTop <= scrollPosition) {
+      activeSection.value = sections[i]
+      break
     }
+  }
     
     ticking = false
   })
@@ -961,21 +947,19 @@ const toggleTheme = () => {
   isDarkTheme.value = !isDarkTheme.value
   document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
   localStorage.setItem('theme', isDarkTheme.value ? 'dark' : 'light')
-}
-
-// 生成粒子样式
+    }
+    
+// 生成粒子样式（简化版，减少计算）
 const getParticleStyle = (index) => {
-  const angle = (index / 20) * 360
-  const radius = 150 + Math.random() * 50
+  const angle = (index / 10) * 360
+  const radius = 150
   const x = Math.cos((angle * Math.PI) / 180) * radius
   const y = Math.sin((angle * Math.PI) / 180) * radius
-  const delay = Math.random() * 2
-  const duration = 3 + Math.random() * 2
+  const delay = index * 0.2
   return {
     left: `calc(50% + ${x}px)`,
     top: `calc(50% + ${y}px)`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`
+    animationDelay: `${delay}s`
   }
 }
 
@@ -1049,7 +1033,7 @@ onMounted(() => {
           if (entry.isIntersecting && !doingLeftListAnimated.value) {
             doingLeftListAnimated.value = true
             entry.target.classList.add('list-visible')
-          }
+      }
         })
       },
       {
@@ -2689,51 +2673,6 @@ onUnmounted(() => {
   font-size: 0.9rem;
 }
 
-.contact-guidelines {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.guideline-card {
-  background: var(--bg-card);
-  padding: 2rem;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.guideline-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.guideline-icon.blue {
-  background: rgba(59, 130, 246, 0.2);
-}
-
-.guideline-icon.pink {
-  background: rgba(236, 72, 153, 0.2);
-}
-
-.guideline-card h4 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-}
-
-.guideline-card p {
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-}
-
-
 /* 背景装饰 */
 .bg-decoration {
   position: fixed;
@@ -3020,9 +2959,6 @@ onUnmounted(() => {
     grid-template-columns: 1fr;
   }
 
-  .contact-guidelines {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* 加载动画 */
@@ -3184,7 +3120,7 @@ onUnmounted(() => {
   height: 4px;
   background: radial-gradient(circle, #667eea, transparent);
   border-radius: 50%;
-  animation: particleFloat infinite;
+  animation: particleFloat 4s infinite;
   box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
 }
 
