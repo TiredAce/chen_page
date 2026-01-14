@@ -467,7 +467,7 @@ const translations = {
       desc2: '一名 AI 原生的年轻人，热爱探索未知领域、收集整理有用的知识并分享。持续发现并实现可以由 AI 加速的问题，希望成为一名优秀的智能体工程师。',
       affiliation: '南开大学 2025级光电信息工程博士生',
       contactMe: '联系我',
-      quote: '学到的很多东西，都是一个个点，我可能现在不知道怎么用,也不能预见到底有没有用，但当某一天觉得这些点有用的时候，我会把它们连成一条线。'
+      quote: '学到的很多东西都是一个个点，可能现在不知道怎么用，也不能预见到底有没有用，但当某一天觉得这些点有用的时候，我会把它们连成一条线甚至一个面'
     },
     sections: {
       about: '关于我',
@@ -501,7 +501,7 @@ const translations = {
     about: {
       title: '关于我',
       selfView: '我眼里的我',
-      card1: '喜欢做梦，情绪敏感，心思细腻，涉猎广泛',
+      card1: '情绪稳定，喜欢做梦，涉猎广泛',
       card2: '喜欢一切够触动内心的东西',
       card3: '做点有价值与有影响力的事情',
       card4: '把AI当作"操作系统"',
@@ -546,7 +546,7 @@ const translations = {
       desc2: 'An AI-native young person who loves exploring unknown fields, collecting and organizing useful knowledge and sharing it. Continuously discovering and implementing problems that can be accelerated by AI, hoping to become an excellent agent engineer.',
       affiliation: 'Nankai University 2025 PhD in Optoelectronic Information Engineering',
       contactMe: 'Contact Me',
-      quote: 'Many things I learned are just dots. I may not know how to use them now, nor can I foresee whether they will be useful. But when I feel these dots are useful one day, I will connect them into a line.'
+      quote: "A lot of what I learn feels like scattered dots. I may not know how or if they'll be useful now, but one day, when the time is right, I'll connect them into a line, or even a complete picture."
     },
     sections: {
       about: 'About Me',
@@ -569,7 +569,7 @@ const translations = {
     about: {
       title: 'About Me',
       selfView: 'Me in My Eyes',
-      card1: 'Love dreaming, emotionally sensitive, thoughtful, widely read',
+      card1: 'emotionally steady, Love dreaming, widely read',
       card2: 'Love everything that touches the heart',
       card3: 'Do something valuable and influential',
       card4: 'Treat AI as an "operating system"',
