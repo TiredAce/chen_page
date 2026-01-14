@@ -328,7 +328,12 @@
           <h3 class="contact-title">{{ item.title }}</h3>
           <p class="contact-detail">{{ item.detail }}</p>
           </a>
-          <div v-else class="contact-card">
+          <div
+            v-else
+            class="contact-card"
+            :class="{ 'clickable': item.key === 'wechat' || item.key === 'email' }"
+            @click="handleContactClick(item, $event)"
+          >
             <div class="contact-icon" :class="item.colorClass">
               {{ item.icon }}
         </div>
@@ -337,6 +342,16 @@
       </div>
         </template>
       </div>
+      <!-- 复制提示消息（跟随鼠标位置的小气泡） -->
+      <transition name="fade">
+        <div
+          v-if="copyMessage"
+          class="copy-message"
+          :style="copyMessageStyle"
+        >
+          {{ copyMessage }}
+        </div>
+      </transition>
       <div class="qr-code-container" ref="qrCodeContainerRef">
         <div class="qr-code-wrapper">
           <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
@@ -450,6 +465,12 @@ const contactGridRef = ref(null)
 const contactGridAnimated = ref(false)
 const qrCodeContainerRef = ref(null)
 const qrCodeContainerAnimated = ref(false)
+const copyMessage = ref('')
+const copyMessageTimeout = ref(null)
+const copyMessageStyle = ref({
+  top: '0px',
+  left: '0px'
+})
 
 // 语言翻译对象
 const translations = {
@@ -948,6 +969,69 @@ const toggleTheme = () => {
   document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
   localStorage.setItem('theme', isDarkTheme.value ? 'dark' : 'light')
     }
+
+// 复制到剪贴板函数
+const copyToClipboard = async (text, type, event) => {
+  // 根据鼠标位置设置提示位置（在光标上方一点）
+  if (event) {
+    const offsetY = 16
+    copyMessageStyle.value = {
+      top: `${event.clientY - offsetY}px`,
+      left: `${event.clientX}px`
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(text)
+    // 显示复制成功提示
+    const message = isEnglish.value 
+      ? `${type === 'wechat' ? 'WeChat' : 'Email'} copied!` 
+      : `${type === 'wechat' ? '微信号' : '邮箱'}已复制`
+    copyMessage.value = message
+    
+    // 清除之前的定时器
+    if (copyMessageTimeout.value) {
+      clearTimeout(copyMessageTimeout.value)
+    }
+    
+    // 1秒后隐藏提示
+    copyMessageTimeout.value = setTimeout(() => {
+      copyMessage.value = ''
+    }, 500)
+  } catch (err) {
+    console.error('复制失败:', err)
+    // 降级方案：使用传统方法
+    const textArea = document.createElement('textarea')
+    textArea.value = text
+    textArea.style.position = 'fixed'
+    textArea.style.left = '-999999px'
+    document.body.appendChild(textArea)
+    textArea.select()
+    try {
+      document.execCommand('copy')
+      const message = isEnglish.value 
+        ? `${type === 'wechat' ? 'WeChat' : 'Email'} copied!` 
+        : `${type === 'wechat' ? '微信号' : '邮箱'}已复制`
+      copyMessage.value = message
+      if (copyMessageTimeout.value) {
+        clearTimeout(copyMessageTimeout.value)
+      }
+      copyMessageTimeout.value = setTimeout(() => {
+        copyMessage.value = ''
+      }, 500)
+    } catch (err) {
+      console.error('降级复制方法也失败:', err)
+    }
+    document.body.removeChild(textArea)
+  }
+}
+
+// 处理联系方式卡片点击
+const handleContactClick = (item, event) => {
+  // 只对微信号和邮箱执行复制操作
+  if (item.key === 'wechat' || item.key === 'email') {
+    copyToClipboard(item.detail, item.key, event)
+  }
+}
     
 // 生成粒子样式（简化版，减少计算）
 const getParticleStyle = (index) => {
@@ -2438,6 +2522,47 @@ onUnmounted(() => {
 
 .contact-card:hover .contact-title {
   animation: textShake 0.5s ease-in-out;
+}
+
+/* 可点击的联系方式卡片 */
+.contact-card.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.contact-card.clickable:active {
+  transform: translateY(-2px) scale(1.02) rotateY(0deg) !important;
+}
+
+/* 复制提示消息 */
+.copy-message {
+  position: fixed;
+  transform: translate(-50%, -120%);
+  /* 使用主题的次级背景色，完全不透明 */
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 10000;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(102, 126, 234, 0.5);
+  pointer-events: none;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -120%) scale(0.8);
+}
+
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+  transform: translate(-50%, -120%) scale(1);
 }
 
 /* 二维码容器 */
