@@ -103,18 +103,7 @@
   box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* 亮色主题下技能section的边框改为透明 */
-.light-theme .skill-item::before {
-  background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)) !important;
-}
 
-/* 亮色主题下技能section的背景改为透明 */
-.light-theme .section-bg-skills {
-  background: 
-    linear-gradient(45deg, transparent 30%, rgba(0, 0, 0, 0.0) 50%, transparent 70%),
-    linear-gradient(-45deg, transparent 30%, rgba(0, 0, 0, 0.0) 50%, transparent 70%),
-    linear-gradient(135deg, transparent 40%, rgba(0, 0, 0, 0.0) 50%, transparent 60%) !important;
-}
 
 /* 亮色主题下hero-description-1的颜色改为纯黑 */
 .light-theme .hero-description-1 {
