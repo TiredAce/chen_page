@@ -261,8 +261,13 @@
           class="knowledge-card"
           :class="`knowledge-card-${item.accent}`"
         >
+          <div class="knowledge-card-orbit"></div>
+          <div class="knowledge-card-grid"></div>
           <div class="knowledge-card-top">
-            <div class="knowledge-code">{{ item.code }}</div>
+            <div class="knowledge-code-block">
+              <div class="knowledge-code-label">{{ isEnglish ? 'Node' : '节点' }}</div>
+              <div class="knowledge-code">{{ item.code }}</div>
+            </div>
             <div class="knowledge-icon">
               {{ item.icon }}
             </div>
@@ -271,6 +276,10 @@
             <p class="knowledge-kicker">{{ item.titleEn }}</p>
             <h3 class="knowledge-title">{{ item.title }}</h3>
           </div>
+          <div class="knowledge-meta">
+            <span class="knowledge-meta-chip">{{ item.groups.length }} {{ isEnglish ? 'clusters' : '组' }}</span>
+            <span class="knowledge-meta-chip">{{ getTopicCount(item) }} {{ isEnglish ? 'topics' : '主题' }}</span>
+          </div>
           <p class="knowledge-desc">{{ item.summary }}</p>
           <div class="knowledge-groups">
             <section
@@ -278,7 +287,10 @@
               :key="group.name"
               class="knowledge-group"
             >
-              <h4>{{ group.name }}</h4>
+              <div class="knowledge-group-head">
+                <h4>{{ group.name }}</h4>
+                <span class="knowledge-group-count">{{ group.topics.length }}</span>
+              </div>
               <div class="knowledge-topics">
                 <template
                   v-for="topic in group.topics"
@@ -307,7 +319,8 @@
         </article>
       </div>
     </section>
-
+
+
     <!-- 联系方式部分 -->
     <section id="contact" class="section contact-section">
       <div class="section-bg section-bg-contact"></div>
@@ -318,14 +331,39 @@
       <p class="section-description">
         {{ t('contact.description') }}
       </p>
+      <div class="qr-code-container" ref="qrCodeContainerRef">
+        <div class="qr-code-wrapper">
+          <div class="qr-code-head">
+            <span class="qr-code-channel">{{ isEnglish ? 'WeChat Portal' : '微信通道' }}</span>
+            <span class="qr-code-status">{{ isEnglish ? 'Scan Ready' : '可扫码' }}</span>
+          </div>
+          <div class="qr-code-core">
+            <div class="qr-code-rings"></div>
+            <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
+          </div>
+          <div class="qr-code-foot">
+            <p class="qr-code-text">{{ t('contact.wechat') }}</p>
+            <span class="qr-code-hint">{{ isEnglish ? 'Hover to amplify' : '悬停可放大' }}</span>
+          </div>
+        </div>
+      </div>
       <div class="contact-grid" ref="contactGridRef">
         <template v-for="(item, index) in contactItems" :key="index">
           <a v-if="item.link" :href="item.link" target="_blank" class="contact-card">
-          <div class="contact-icon" :class="item.colorClass">
-            {{ item.icon }}
-          </div>
-          <h3 class="contact-title">{{ item.title }}</h3>
-          <p class="contact-detail">{{ item.detail }}</p>
+            <div class="contact-card-noise"></div>
+            <div class="contact-card-head">
+              <span class="contact-channel">{{ getContactChannel(item) }}</span>
+              <span class="contact-status">{{ isEnglish ? 'Active' : '在线' }}</span>
+            </div>
+            <div class="contact-icon" :class="item.colorClass">
+              {{ item.icon }}
+            </div>
+            <h3 class="contact-title">{{ item.title }}</h3>
+            <p class="contact-detail">{{ item.detail }}</p>
+            <div class="contact-card-foot">
+              <span class="contact-action">{{ isEnglish ? 'Open link' : '打开链接' }}</span>
+              <span class="contact-action-arrow">↗</span>
+            </div>
           </a>
           <div
             v-else
@@ -333,12 +371,21 @@
             :class="{ 'clickable': item.key === 'wechat' || item.key === 'email' }"
             @click="handleContactClick(item, $event)"
           >
+            <div class="contact-card-noise"></div>
+            <div class="contact-card-head">
+              <span class="contact-channel">{{ getContactChannel(item) }}</span>
+              <span class="contact-status">{{ isEnglish ? 'Copy' : '可复制' }}</span>
+            </div>
             <div class="contact-icon" :class="item.colorClass">
               {{ item.icon }}
-        </div>
+            </div>
             <h3 class="contact-title">{{ item.title }}</h3>
             <p class="contact-detail">{{ item.detail }}</p>
-      </div>
+            <div class="contact-card-foot">
+              <span class="contact-action">{{ isEnglish ? 'Tap to copy' : '点击复制' }}</span>
+              <span class="contact-action-arrow">+</span>
+            </div>
+          </div>
         </template>
       </div>
       <!-- 复制提示消息（跟随鼠标位置的小气泡） -->
@@ -351,84 +398,61 @@
           {{ copyMessage }}
         </div>
       </transition>
-      <div class="qr-code-container" ref="qrCodeContainerRef">
-        <div class="qr-code-wrapper">
-          <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
-          <p class="qr-code-text">{{ t('contact.wechat') }}</p>
-        </div>
-      </div>
     </section>
 
     <!-- 页脚 -->
     <footer class="footer">
       <div class="footer-content">
         <div class="runtime-display">
-          <span class="runtime-label">{{ t('footer.runtime') }}</span>
-          
-          <!-- 年 -->
-          <div class="flip-clock-item">
-            <div class="flip-card" :class="{ 'flip': flipStates.years }">
-              <div class="flip-card-inner">
-                <div class="flip-card-front"><span>{{ String(prevRuntime.years).padStart(2, '0') }}</span></div>
-                <div class="flip-card-back"><span>{{ String(runtime.years).padStart(2, '0') }}</span></div>
-              </div>
+          <div class="runtime-shell-glow"></div>
+          <div class="runtime-shell-grid"></div>
+          <div class="runtime-head">
+            <div class="runtime-window-controls" aria-hidden="true">
+              <span class="runtime-control runtime-control-close"></span>
+              <span class="runtime-control runtime-control-minimize"></span>
+              <span class="runtime-control runtime-control-expand"></span>
             </div>
-            <span class="runtime-unit">{{ isEnglish ? 'Y' : '年' }}</span>
+            <div class="runtime-terminal-title">
+              <span class="runtime-terminal-app">Terminal</span>
+              <span class="runtime-terminal-path">{{ isEnglish ? 'uptime.sh' : 'uptime.sh' }}</span>
+            </div>
           </div>
-          
-          <!-- 月 -->
-          <div class="flip-clock-item">
-            <div class="flip-card" :class="{ 'flip': flipStates.months }">
-              <div class="flip-card-inner">
-                <div class="flip-card-front"><span>{{ String(prevRuntime.months).padStart(2, '0') }}</span></div>
-                <div class="flip-card-back"><span>{{ String(runtime.months).padStart(2, '0') }}</span></div>
-              </div>
-            </div>
-            <span class="runtime-unit">{{ isEnglish ? 'M' : '月' }}</span>
+          <div class="runtime-divider"></div>
+          <div class="runtime-command-line">
+            <span class="runtime-prompt">chen@macbook ~ %</span>
+            <span class="runtime-command">{{ isEnglish ? './uptime.sh --live' : './uptime.sh --live' }}</span>
+            <span class="runtime-caret"></span>
           </div>
-          
-          <!-- 天 -->
-          <div class="flip-clock-item">
-            <div class="flip-card" :class="{ 'flip': flipStates.days }">
-              <div class="flip-card-inner">
-                <div class="flip-card-front"><span>{{ String(prevRuntime.days).padStart(2, '0') }}</span></div>
-                <div class="flip-card-back"><span>{{ String(runtime.days).padStart(2, '0') }}</span></div>
+          <div class="runtime-metrics">
+            <div class="runtime-output-line runtime-output-line-flip">
+              <span class="runtime-output-label">{{ t('footer.runtime') }}</span>
+              <div class="runtime-flipboard">
+                <div
+                  v-for="unit in runtimeUnits"
+                  :key="unit.key"
+                  class="runtime-flip-unit"
+                >
+                  <div
+                    class="runtime-flip-card"
+                    :class="{ 'is-flipping': flipStates[unit.key] }"
+                  >
+                    <div class="runtime-flip-static runtime-flip-static-top">
+                      <span>{{ unit.display }}</span>
+                    </div>
+                    <div class="runtime-flip-static runtime-flip-static-bottom">
+                      <span>{{ unit.display }}</span>
+                    </div>
+                    <div class="runtime-flip-fold runtime-flip-fold-top">
+                      <span>{{ unit.previousDisplay }}</span>
+                    </div>
+                    <div class="runtime-flip-fold runtime-flip-fold-bottom">
+                      <span>{{ unit.display }}</span>
+                    </div>
+                  </div>
+                  <span class="runtime-flip-caption">{{ unit.label }}</span>
+                </div>
               </div>
             </div>
-            <span class="runtime-unit">{{ isEnglish ? 'D' : '天' }}</span>
-          </div>
-          
-          <!-- 时 -->
-          <div class="flip-clock-item">
-            <div class="flip-card" :class="{ 'flip': flipStates.hours }">
-              <div class="flip-card-inner">
-                <div class="flip-card-front"><span>{{ String(prevRuntime.hours).padStart(2, '0') }}</span></div>
-                <div class="flip-card-back"><span>{{ String(runtime.hours).padStart(2, '0') }}</span></div>
-              </div>
-            </div>
-            <span class="runtime-unit">{{ isEnglish ? 'H' : '时' }}</span>
-          </div>
-          
-          <!-- 分 -->
-          <div class="flip-clock-item">
-            <div class="flip-card" :class="{ 'flip': flipStates.minutes }">
-              <div class="flip-card-inner">
-                <div class="flip-card-front"><span>{{ String(prevRuntime.minutes).padStart(2, '0') }}</span></div>
-                <div class="flip-card-back"><span>{{ String(runtime.minutes).padStart(2, '0') }}</span></div>
-              </div>
-            </div>
-            <span class="runtime-unit">{{ isEnglish ? 'M' : '分' }}</span>
-          </div>
-          
-          <!-- 秒 -->
-          <div class="flip-clock-item">
-            <div class="flip-card" :class="{ 'flip': flipStates.seconds }">
-              <div class="flip-card-inner">
-                <div class="flip-card-front"><span>{{ String(prevRuntime.seconds).padStart(2, '0') }}</span></div>
-                <div class="flip-card-back"><span>{{ String(runtime.seconds).padStart(2, '0') }}</span></div>
-              </div>
-            </div>
-            <span class="runtime-unit">{{ isEnglish ? 'S' : '秒' }}</span>
           </div>
         </div>
       </div>
@@ -538,10 +562,60 @@ const knowledgeItems = computed(() => {
   }))
 })
 
+const getTopicCount = (item) => {
+  return item.groups.reduce((total, group) => total + group.topics.length, 0)
+}
+
 const contactItems = computed(() => {
   return contactItemsBase.map(item => ({
     ...item,
     title: t(`contact.items.${item.key}.title`)
+  }))
+})
+
+const getContactChannel = (item) => {
+  const channelMap = {
+    wechat: isEnglish.value ? 'Private channel' : '私域通道',
+    email: isEnglish.value ? 'Formal mail' : '正式通信',
+    github: isEnglish.value ? 'Code portal' : '代码门户',
+    website: isEnglish.value ? 'Web node' : '站点节点'
+  }
+
+  return channelMap[item.key] || (isEnglish.value ? 'External channel' : '外部通道')
+}
+
+const formatRuntimeValue = (value) => String(Math.max(0, value)).padStart(2, '0')
+
+const runtimeUnits = computed(() => {
+  const labels = isEnglish.value
+    ? {
+        years: 'YR',
+        months: 'MO',
+        days: 'DAY',
+        hours: 'HR',
+        minutes: 'MIN',
+        seconds: 'SEC'
+      }
+    : {
+        years: '年',
+        months: '月',
+        days: '天',
+        hours: '时',
+        minutes: '分',
+        seconds: '秒'
+      }
+
+  return [
+    { key: 'years', label: labels.years },
+    { key: 'months', label: labels.months },
+    { key: 'days', label: labels.days },
+    { key: 'hours', label: labels.hours },
+    { key: 'minutes', label: labels.minutes },
+    { key: 'seconds', label: labels.seconds }
+  ].map((unit) => ({
+    ...unit,
+    display: formatRuntimeValue(runtime.value[unit.key]),
+    previousDisplay: formatRuntimeValue(prevRuntime.value[unit.key])
   }))
 })
 

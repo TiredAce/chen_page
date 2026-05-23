@@ -14,7 +14,7 @@ let width = 0
 let height = 0
 let pixelRatio = 1
 
-const palette = ['102, 126, 234', '139, 92, 246', '56, 239, 125', '236, 72, 153']
+const palette = ['0, 243, 255', '255, 58, 167', '108, 91, 255', '195, 244, 255']
 
 const createParticle = () => ({
   x: Math.random() * width,
@@ -49,7 +49,7 @@ const drawConnection = (from, to, maxDistance) => {
   const distance = Math.hypot(dx, dy)
   if (distance > maxDistance) return
 
-  const alpha = (1 - distance / maxDistance) * 0.22
+  const alpha = (1 - distance / maxDistance) * 0.16
   const gradient = ctx.createLinearGradient(from.x, from.y, to.x, to.y)
   gradient.addColorStop(0, `rgba(${from.color}, ${alpha})`)
   gradient.addColorStop(1, `rgba(${to.color}, ${alpha})`)
@@ -73,8 +73,8 @@ const render = () => {
       const dy = pointer.y - particle.y
       const distance = Math.hypot(dx, dy)
       if (distance < 180) {
-        particle.vx -= (dx / distance) * 0.006
-        particle.vy -= (dy / distance) * 0.006
+        particle.vx -= (dx / distance) * 0.0042
+        particle.vy -= (dy / distance) * 0.0042
       }
     }
 
@@ -96,12 +96,12 @@ const render = () => {
       drawConnection(particle, pointer, 210)
     }
 
-    const glow = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.size * 10)
-    glow.addColorStop(0, `rgba(${particle.color}, 0.9)`)
+    const glow = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.size * 12)
+    glow.addColorStop(0, `rgba(${particle.color}, 0.72)`)
     glow.addColorStop(1, `rgba(${particle.color}, 0)`)
     ctx.fillStyle = glow
     ctx.beginPath()
-    ctx.arc(particle.x, particle.y, particle.size * 10, 0, Math.PI * 2)
+    ctx.arc(particle.x, particle.y, particle.size * 12, 0, Math.PI * 2)
     ctx.fill()
   })
 
@@ -140,12 +140,12 @@ onUnmounted(() => {
   inset: 0;
   z-index: -2;
   pointer-events: none;
-  opacity: 0.62;
+  opacity: 0.38;
 }
 
 @media (max-width: 768px) {
   .aurora-canvas {
-    opacity: 0.42;
+    opacity: 0.24;
   }
 }
 </style>
