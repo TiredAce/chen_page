@@ -40,7 +40,8 @@ export function useSectionNavigation(sectionIds) {
 
     isScrolling = true
 
-    const targetPosition = element.offsetTop - 20
+    const scrollMarginTop = Number.parseFloat(window.getComputedStyle(element).scrollMarginTop) || 20
+    const targetPosition = Math.max(element.offsetTop - scrollMarginTop, 0)
     const startPosition = window.scrollY
     const distance = targetPosition - startPosition
     if (distance === 0) {
