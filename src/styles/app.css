@@ -2623,6 +2623,9 @@
 }
 
 .knowledge-topic {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   min-height: 30px;
   padding: 0.28rem 0.62rem;
   border-radius: 8px 999px 999px 8px;
@@ -2631,10 +2634,31 @@
   transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 
+.knowledge-topic-status {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.knowledge-topic-status-live {
+  background: #4ade80;
+  box-shadow:
+    0 0 0 1px rgba(74, 222, 128, 0.24),
+    0 0 10px rgba(74, 222, 128, 0.42);
+}
+
+.knowledge-topic-status-missing {
+  background: #f87171;
+  box-shadow:
+    0 0 0 1px rgba(248, 113, 113, 0.24),
+    0 0 10px rgba(248, 113, 113, 0.34);
+}
+
 .knowledge-topic-link::after {
-  content: 'LINK';
-  font-size: 0.64rem;
-  letter-spacing: 0.08em;
+  content: none;
+  display: none;
 }
 
 .knowledge-topic:hover {
@@ -3024,6 +3048,10 @@
   background: rgba(var(--knowledge-accent-rgb), 0.06);
   border-color: rgba(var(--knowledge-accent-rgb), 0.11);
   color: rgba(37, 56, 81, 0.82);
+}
+
+.light-theme .knowledge-topic-status {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9);
 }
 
 .light-theme .knowledge-topic:hover {

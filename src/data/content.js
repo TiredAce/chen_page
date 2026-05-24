@@ -13,15 +13,15 @@ export const knowledgeItemsBase = [
       {
         name: '科研规划',
         topics: [
-          topic('博士毕业 Pipeline'),
-          topic('科研笔记')
+          topic('博士毕业 Pipeline', 'https://my.feishu.cn/wiki/H4KBwcIx9ic5QukfT8vcnoXvnSg'),
+          topic('科研论笔记', 'https://my.feishu.cn/wiki/HHsFw9uKfi9LMgkA1KVcRj6EnDb')
         ]
       },
       {
         name: '学术产出',
         topics: [
-          topic('AI 科研论文写作'),
-          topic('专利申请流程')
+          topic('AI 科研论文写作', 'https://my.feishu.cn/wiki/G6rDwzlGtidejLktWGPcKEEPnYb'),
+          topic('专利申请流程', 'https://my.feishu.cn/wiki/N6pAwi3boiKFBDkPZE0cxRzinxh')
         ]
       }
     ]
@@ -36,26 +36,29 @@ export const knowledgeItemsBase = [
     summary: '围绕核心专业领域，从基础理论、细分方向到仿真工具沉淀知识。',
     groups: [
       {
-        name: '理论基础',
+        name: '光学理论基础',
         topics: [
-          topic('光学理论基础'),
-          topic('专业基础课'),
-          topic('应用光学 / 物理光学'),
-          topic('非线性光学 / 傅里叶光学')
+          topic('专业基础课', 'https://my.feishu.cn/wiki/LDIOwPMo2iEb2IkahWkc62cbnUf'),
+          topic('应用光学', 'https://my.feishu.cn/wiki/MaiuwHcjcidG7ZkxdhKcxbt9nCd'),
+          topic('物理光学', 'https://my.feishu.cn/wiki/WAqXwMnTbitBE5kr1UXcdNR1nmc'),
+          topic('傅里叶光学', 'https://my.feishu.cn/wiki/BzHCwbXkYinSWikXAGeceju4nyg'),
+          topic('非线性光学', 'https://my.feishu.cn/wiki/Pyy9wA0VBiTV9fk0ckScbOGanse')
         ]
       },
       {
         name: '研究方向',
         topics: [
-          topic('飞秒激光'),
-          topic('激光干扰与致盲'),
-          topic('电光调制工作')
+          topic('飞秒激光', 'https://my.feishu.cn/wiki/MXfiwriXxijDINkyDAFcL5Jhnag'),
+          topic('激光干扰', 'https://my.feishu.cn/wiki/K02YwApPliWp2wk0StOc466Onvk'),
+          topic('电光调制', 'https://my.feishu.cn/wiki/F8ehwv9JWiEVlpk8OV7c3rNRn8f')
         ]
       },
       {
-        name: '工具方法',
+        name: '物理仿真',
         topics: [
-          topic('物理仿真软件')
+          topic('COMSOL', 'https://my.feishu.cn/wiki/QO0twSsRairz1GkZhCFcdSVKnwd'),
+          topic('Zemax', 'https://my.feishu.cn/wiki/LS4fwC1bOijf3Sk4qqYcqqxqnMh'),
+          topic('CST', 'https://my.feishu.cn/wiki/ZelVwU2qsiT43MkJSX8cjwUXn4f')
         ]
       }
     ]
@@ -70,11 +73,17 @@ export const knowledgeItemsBase = [
     summary: '将无人机、定位导航、ROS 与视觉算法归纳成系统工程知识域。',
     groups: [
       {
+        name: '数学基础',
+        topics: [
+          topic('线性代数', 'https://my.feishu.cn/wiki/SVSrwJYh6ikRqzkxa34czXainAe'),
+          ]
+      },
+      {
         name: '系统工程',
         topics: [
-          topic('无人机导航'),
-          topic('视觉 SLAM 十四讲'),
-          topic('古月·ROS 入门 21 讲')
+          topic('无人机导航', 'https://my.feishu.cn/wiki/Jl0Dw2gMxiTr8ykwy7TceugpnRb'),
+          topic('视觉 SLAM 十四讲', 'https://my.feishu.cn/wiki/BtxLwAwqEiZqXmkyvjXchJbOntc'),
+          topic('古月·ROS 入门 21 讲', 'https://my.feishu.cn/wiki/ZvzswHtHgiM425ke21ncpvUxnKe')
         ]
       }
     ]
@@ -91,24 +100,24 @@ export const knowledgeItemsBase = [
       {
         name: 'AI 与算法',
         topics: [
-          topic('强化学习中的数学'),
-          topic('鱼皮的 AI 知识库')
+          topic('强化学习中的数学', 'https://my.feishu.cn/wiki/VCmDwy268iybMfk74bEcqmU4nwf'),
+          topic('鱼皮的 AI 知识库', 'https://my.feishu.cn/wiki/TldqwoPaBiWqRAkOzuncoCpQnEc')
         ]
       },
       {
         name: '开发实战',
         topics: [
-          topic('智能 OnCall Agent 项目'),
-          topic('OpenClaw 文档')
+          topic('智能 OnCall Agent 项目', 'https://my.feishu.cn/wiki/BaPRwBf0lixVWUknlfvcCpaZnyc'),
+          topic('程序员的 README', 'https://my.feishu.cn/wiki/CAUuwHe2HiQ6RlkNvOhcuNkvnWe')
         ]
       },
       {
         name: '编程基础',
         topics: [
-          topic('鸟哥的 Linux 私房菜'),
-          topic('Web 前端开发'),
-          topic('Awesome Github Repo'),
-          topic('程序员的 README')
+          topic('鸟哥的 Linux 私房菜', 'https://my.feishu.cn/wiki/Pp60wCyQfigZLfkl3l7cXYrAnKf'),
+          topic('Web 前端开发', 'https://my.feishu.cn/wiki/JfYGwNrS8i1DXNksMUtcNsCCnwh'),
+          topic('Awesome Github Repo', 'https://my.feishu.cn/wiki/MatrwBlH2izQqjkWHaTcWDXwnEh'),
+
         ]
       }
     ]
@@ -125,15 +134,15 @@ export const knowledgeItemsBase = [
       {
         name: '认知升级',
         topics: [
-          topic('认知觉醒：内观自己'),
-          topic('认知觉醒：外观世界'),
-          topic('“应然”与“实然”')
+          topic('认知觉醒：内观自己', 'https://my.feishu.cn/wiki/RugGwOubcip39vkmSaoc8THWnGg'),
+          topic('认知觉醒：外观世界', 'https://my.feishu.cn/wiki/FzScwMG9ii4aK5ktHt7ckecynQf'),
+          topic('“应然”与“实然”', 'https://my.feishu.cn/wiki/DUkRwaHWViCMBjkTBgNcG0YYn5d')
         ]
       },
       {
         name: '阅读沉淀',
         topics: [
-          topic('读书笔记')
+          topic('读书笔记', 'https://my.feishu.cn/wiki/BMZUwu8dwiY60Wk9F2ccK9EQnMh')
         ]
       }
     ]
@@ -150,15 +159,15 @@ export const knowledgeItemsBase = [
       {
         name: '语言与健康',
         topics: [
-          topic('英语笔记'),
-          topic('健身笔记')
+          topic('英语笔记', 'https://my.feishu.cn/wiki/Tpw5wFlmQi7MwvkUQ6zc0WhsnYg'),
+          topic('健身笔记', 'https://my.feishu.cn/wiki/RT0RwXYW6iFT7okB98BcMGSWnug')
         ]
       },
       {
         name: '财富管理',
         topics: [
-          topic('理财笔记'),
-          topic('量化笔记')
+          topic('理财笔记', 'https://my.feishu.cn/wiki/FNSkwxZgLiQkWhkhJHkcaddcnxf'),
+          topic('量化笔记', 'https://my.feishu.cn/wiki/Zs3pwBrYLiIYnCksQ3ocNjIPnBb')
         ]
       }
     ]

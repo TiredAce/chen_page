@@ -303,6 +303,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                   >
+                    <span class="knowledge-topic-status knowledge-topic-status-live" aria-hidden="true"></span>
                     {{ topic.title }}
                   </a>
                   <span
@@ -310,6 +311,7 @@
                     :key="topic.title"
                     class="knowledge-topic"
                   >
+                    <span class="knowledge-topic-status knowledge-topic-status-missing" aria-hidden="true"></span>
                     {{ topic.title }}
                   </span>
                 </template>
