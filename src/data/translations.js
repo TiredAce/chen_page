@@ -9,8 +9,8 @@ export const translations = {
     },
     hero: {
       name: '我是陈碧辉',
-      desc1: '一名战略驱动、系统化思考、高度务实的机会主义者。',
-      desc2: '一名 AI 原生的年轻人，热爱探索未知领域、收集整理有用的知识并分享。持续发现并实现可以由 AI 加速的问题，希望成为一名优秀的智能体工程师。',
+      desc1: '一个以战略思维驱动、追求高效落地的务实主义者。',
+      desc2: '作为拥抱 AI 的新生代，我充满对前沿技术的好奇，乐于构建并分享结构化的知识体系。始终致力于寻找并打通理论与工程落地之间的闭环，向顶尖的智能体工程师迈进。',
       affiliation: '南开大学 2025级光电信息工程博士生',
       contactMe: '联系我',
       quote: '学到的很多东西都是一个个点，可能现在不知道怎么用，但当某一天觉得这些点有用的时候，我会把它们连成一条线甚至一个面'
@@ -47,7 +47,7 @@ export const translations = {
     about: {
       title: '关于我',
       selfView: '我眼里的我',
-      card1: '情绪稳定，喜欢做梦，涉猎广泛',
+      card1: '内核稳定，脑洞常开，技能树复杂',
       card2: '喜欢一切够触动内心的东西',
       card3: '做点有价值与有影响力的事情',
       card4: '把AI当作"操作系统"',
@@ -88,8 +88,8 @@ export const translations = {
     },
     hero: {
       name: "I'm Chen Bihui",
-      desc1: 'A strategically driven, systematic thinking, highly pragmatic opportunist.',
-      desc2: 'An AI-native young person who loves exploring unknown fields, collecting and organizing useful knowledge and sharing it. Continuously discovering and implementing problems that can be accelerated by AI, hoping to become an excellent agent engineer.',
+      desc1: 'A strategy-driven pragmatist pursuing efficient implementation.',
+      desc2: 'As an AI-embracing youth, I am curious about cutting-edge tech and enjoy building and sharing structured knowledge. I constantly strive to close the loop between theory and engineering, working towards becoming a top AI Agent Engineer.',
       affiliation: 'Nankai University 2025 PhD in Optoelectronic Information Engineering',
       contactMe: 'Contact Me',
       quote: "A lot of what I learn feels like scattered dots. I may not know how or if they'll be useful now, but one day, when the time is right, I'll connect them into a line, or even a complete picture."
