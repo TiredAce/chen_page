@@ -624,6 +624,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  aspect-ratio: 3 / 4;
   border-radius: 20px;
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
@@ -824,6 +825,8 @@
 /* 关于我部分 */
 .about-section {
   padding-top: 5rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
 }
 
 .about-cards {
@@ -1342,6 +1345,8 @@
 /* 知识空间部分 */
 .knowledge-section {
   padding-top: 5rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 1500px;
 }
 
 .knowledge-map {
@@ -1633,6 +1638,8 @@
 /* 技能部分 */
 .contact-section {
   padding-top: 5rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 1200px;
 }
 
 .contact-grid {
@@ -1904,6 +1911,7 @@
 .qr-code-image {
   width: 210px;
   height: 210px;
+  aspect-ratio: 1 / 1;
   border-radius: 18px;
   object-fit: contain;
   background: #ffffff;
@@ -4060,7 +4068,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: fadeOut 0.5s ease-out 1.5s forwards;
 }
 
 @keyframes fadeOut {

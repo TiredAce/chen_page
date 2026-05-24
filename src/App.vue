@@ -1,10 +1,10 @@
 <template>
   <div class="app">
-    <AuroraCanvas />
+    <AuroraCanvas v-if="showAuroraCanvas" />
     <ScrollProgress />
 
     <!-- 加载动画 -->
-    <div v-if="isLoading" class="loading-screen">
+    <div v-if="isLoading" class="loading-screen" :class="{ 'is-exiting': isLoadingExiting }">
       <div class="loading-content">
         <div class="loading-logo">
           <div class="logo-brain">🧠</div>
@@ -42,7 +42,7 @@
         </div>
         <div class="nav-actions">
           <button class="icon-btn language-toggle" @click="toggleLanguage" :title="isEnglish ? 'Switch to Chinese' : 'Switch to English'">
-            {{ isEnglish ? 'En' :'中' }}
+            {{ isEnglish ? 'En' : '中' }}
           </button>
           <button class="icon-btn theme-toggle" @click="toggleTheme" :title="isDarkTheme ? t('theme.switchToLight') : t('theme.switchToDark')">
             {{ isDarkTheme ? '🌙' : '☀' }}
@@ -112,7 +112,17 @@
         <div class="hero-left">
           <div class="profile-image">
             <HeroOrbit />
-            <img src="/main_photo.png" alt="个人照片" class="profile-photo" />
+            <img
+              :src="heroPhoto640"
+              :srcset="heroPhotoSrcset"
+              sizes="(max-width: 768px) 80vw, 300px"
+              alt="个人照片"
+              class="profile-photo"
+              width="300"
+              height="400"
+              fetchpriority="high"
+              decoding="async"
+            />
           </div>
         </div>
         <div class="hero-right">
@@ -341,7 +351,15 @@
           </div>
           <div class="qr-code-core">
             <div class="qr-code-rings"></div>
-            <img src="/wechat-qr.png" alt="微信二维码" class="qr-code-image" />
+            <img
+              :src="wechatQr"
+              alt="微信二维码"
+              class="qr-code-image"
+              width="210"
+              height="210"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
           <div class="qr-code-foot">
             <p class="qr-code-text">{{ t('contact.wechat') }}</p>
@@ -476,6 +494,9 @@ import ScrollProgress from './components/ScrollProgress.vue'
 import { useRevealAnimations } from './composables/useRevealAnimations'
 import { useRuntimeClock } from './composables/useRuntimeClock'
 import { useSectionNavigation } from './composables/useSectionNavigation'
+import heroPhoto320 from '../main_photo-320.jpg'
+import heroPhoto640 from '../main_photo-640.jpg'
+import wechatQr from '../wechat-qr.png'
 
 const SECTION_IDS = ['home', 'about', 'knowledge', 'contact']
 const { isScrolled, activeSection, handleScroll, scrollTo } = useSectionNavigation(SECTION_IDS)
@@ -483,13 +504,20 @@ const isDarkTheme = ref(true)
 const isEnglish = ref(false)
 const isMobileMenuOpen = ref(false)
 const isLoading = ref(true)
+const isLoadingExiting = ref(false)
+const showAuroraCanvas = ref(false)
 const loadingText = 'Loading...'
+const heroPhotoSrcset = `${heroPhoto320} 320w, ${heroPhoto640} 640w`
 const copyMessage = ref('')
 const copyMessageTimeout = ref(null)
 const copyMessageStyle = ref({
   top: '0px',
   left: '0px'
 })
+let isUnmounted = false
+let initialViewTimeoutId = 0
+let loadingExitTimeoutId = 0
+let idleTaskId = 0
 const {
   aboutCardsRef,
   doingLeftListRef,
@@ -625,7 +653,7 @@ const toggleTheme = () => {
   isDarkTheme.value = !isDarkTheme.value
   document.documentElement.classList.toggle('light-theme', !isDarkTheme.value)
   localStorage.setItem('theme', isDarkTheme.value ? 'dark' : 'light')
-    }
+}
 
 // 复制到剪贴板函数
 const copyToClipboard = async (text, type, event) => {
@@ -675,8 +703,8 @@ const copyToClipboard = async (text, type, event) => {
       copyMessageTimeout.value = setTimeout(() => {
         copyMessage.value = ''
       }, 500)
-    } catch (err) {
-      console.error('降级复制方法也失败:', err)
+    } catch (copyError) {
+      console.error('降级复制方法也失败:', copyError)
     }
     document.body.removeChild(textArea)
   }
@@ -704,6 +732,114 @@ const getParticleStyle = (index) => {
   }
 }
 
+const scheduleIdleWork = (callback) => {
+  if ('requestIdleCallback' in window) {
+    idleTaskId = window.requestIdleCallback(() => {
+      idleTaskId = 0
+      callback()
+    }, { timeout: 600 })
+    return
+  }
+
+  idleTaskId = window.setTimeout(() => {
+    idleTaskId = 0
+    callback()
+  }, 1)
+}
+
+const clearPendingWork = () => {
+  if (initialViewTimeoutId) {
+    clearTimeout(initialViewTimeoutId)
+    initialViewTimeoutId = 0
+  }
+
+  if (loadingExitTimeoutId) {
+    clearTimeout(loadingExitTimeoutId)
+    loadingExitTimeoutId = 0
+  }
+
+  if (!idleTaskId) {
+    return
+  }
+
+  if ('cancelIdleCallback' in window) {
+    window.cancelIdleCallback(idleTaskId)
+  } else {
+    clearTimeout(idleTaskId)
+  }
+
+  idleTaskId = 0
+}
+
+const preloadImage = (src) => new Promise((resolve) => {
+  const image = new Image()
+  image.decoding = 'async'
+  image.src = src
+
+  const finalize = () => resolve()
+
+  if (image.complete) {
+    image.decode?.().catch(() => undefined).finally(finalize)
+    return
+  }
+
+  image.onload = finalize
+  image.onerror = finalize
+})
+
+const getPreferredHeroPhoto = () => {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+  const viewportWidth = window.innerWidth <= 768 ? Math.min(window.innerWidth * 0.8, 300) : 300
+  return viewportWidth * dpr <= 320 ? heroPhoto320 : heroPhoto640
+}
+
+const finalizeInitialRender = () => {
+  if (isUnmounted || isLoadingExiting.value) {
+    return
+  }
+
+  isLoadingExiting.value = true
+  document.body.style.overflow = ''
+  showAuroraCanvas.value = true
+
+  scheduleIdleWork(() => {
+    if (isUnmounted) {
+      return
+    }
+
+    startRuntimeClock()
+    setupRevealAnimations()
+  })
+
+  loadingExitTimeoutId = window.setTimeout(() => {
+    if (isUnmounted) {
+      return
+    }
+
+    isLoading.value = false
+    isLoadingExiting.value = false
+    loadingExitTimeoutId = 0
+  }, 450)
+}
+
+const waitForInitialView = async () => {
+  const maxWait = new Promise((resolve) => {
+    initialViewTimeoutId = window.setTimeout(resolve, 1200)
+  })
+
+  await Promise.race([
+    preloadImage(getPreferredHeroPhoto()),
+    maxWait
+  ])
+
+  if (initialViewTimeoutId) {
+    clearTimeout(initialViewTimeoutId)
+    initialViewTimeoutId = 0
+  }
+
+  requestAnimationFrame(finalizeInitialRender)
+}
+
 onMounted(() => {
   // 加载时禁用滚动
   document.body.style.overflow = 'hidden'
@@ -726,25 +862,17 @@ onMounted(() => {
     isEnglish.value = false
   }
   
-  // 加载动画：至少显示 1.5 秒，然后淡出
-  setTimeout(() => {
-    isLoading.value = false
-    document.body.style.overflow = ''
-  }, 2000)
-  
-  // 加载动画：至少显示 1.5 秒，然后淡出
-  setTimeout(() => {
-    isLoading.value = false
-    document.body.style.overflow = ''
-  }, 2000)
-  
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleScroll, { passive: true })
   handleScroll()
-  startRuntimeClock()
-  setupRevealAnimations()
+  void waitForInitialView()
 })
 
 onUnmounted(() => {
+  isUnmounted = true
+  clearPendingWork()
+  if (copyMessageTimeout.value) {
+    clearTimeout(copyMessageTimeout.value)
+  }
   window.removeEventListener('scroll', handleScroll)
   stopRuntimeClock()
   cleanupRevealAnimations()

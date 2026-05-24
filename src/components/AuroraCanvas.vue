@@ -13,6 +13,9 @@ let frameId = 0
 let width = 0
 let height = 0
 let pixelRatio = 1
+let isVisible = true
+let isReducedMotion = false
+let mediaQuery = null
 
 const palette = ['0, 243, 255', '255, 58, 167', '108, 91, 255', '195, 244, 255']
 
@@ -24,6 +27,10 @@ const createParticle = () => ({
   size: Math.random() * 1.8 + 0.7,
   color: palette[Math.floor(Math.random() * palette.length)]
 })
+
+const updateMotionPreference = () => {
+  isReducedMotion = Boolean(mediaQuery?.matches)
+}
 
 const resize = () => {
   const canvas = canvasRef.value
@@ -62,13 +69,13 @@ const drawConnection = (from, to, maxDistance) => {
 }
 
 const render = () => {
-  if (!ctx) return
+  if (!ctx || !isVisible) return
 
   ctx.clearRect(0, 0, width, height)
   ctx.globalCompositeOperation = 'lighter'
 
   particles.forEach((particle, index) => {
-    if (pointer.active) {
+    if (pointer.active && !isReducedMotion) {
       const dx = pointer.x - particle.x
       const dy = pointer.y - particle.y
       const distance = Math.hypot(dx, dy)
@@ -118,12 +125,31 @@ const handlePointerLeave = () => {
   pointer.active = false
 }
 
+const handleVisibilityChange = () => {
+  isVisible = document.visibilityState !== 'hidden'
+
+  if (!isVisible) {
+    pointer.active = false
+    cancelAnimationFrame(frameId)
+    frameId = 0
+    return
+  }
+
+  if (!frameId) {
+    render()
+  }
+}
+
 onMounted(() => {
+  mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+  updateMotionPreference()
   resize()
   render()
   window.addEventListener('resize', resize)
   window.addEventListener('pointermove', handlePointerMove)
   window.addEventListener('pointerleave', handlePointerLeave)
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+  mediaQuery.addEventListener?.('change', updateMotionPreference)
 })
 
 onUnmounted(() => {
@@ -131,6 +157,8 @@ onUnmounted(() => {
   window.removeEventListener('resize', resize)
   window.removeEventListener('pointermove', handlePointerMove)
   window.removeEventListener('pointerleave', handlePointerLeave)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+  mediaQuery?.removeEventListener?.('change', updateMotionPreference)
 })
 </script>
 
